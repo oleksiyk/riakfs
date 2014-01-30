@@ -1,6 +1,6 @@
 "use strict";
 
-/* global before, describe, it, connect, sinon */
+/* global describe, it, sinon */
 
 describe('#stat', function() {
 
