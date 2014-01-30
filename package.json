@@ -1,0 +1,39 @@
+{
+    "name": "riakfs",
+    "description": "Filesystem implementation in Riak that emulates node.js 'fs' module",
+    "homepage": "http://github.com/oleksiyk/riakfs",
+    "author": {
+        "name": "Oleksiy Krivoshey",
+        "email": "oleksiyk@gmail.com"
+    },
+    "version": "0.0.1",
+    "main": "./lib/index.js",
+    "dependencies": {
+        "riakpbc": "~=1.2.0",
+        "bluebird": "~=1.0.*",
+        "lodash": "~=2.4.*",
+        "mmmagic": "~=0.3.5",
+        "xregexp": "~=2.0.0",
+        "generic-pool": "~=2.0.4",
+        "node-uuid": "~=1.4.1"
+    },
+    "devDependencies": {
+        "chai": "~=1.8.1",
+        "sinon-chai": "~=2.4.0",
+        "chai-as-promised": "~=4.1.0",
+        "mocha-as-promised": "~=2.0.0"
+    },
+    "bugs": {
+        "url": "https://github.com/oleksiyk/riakfs/issues"
+    },
+    "scripts": {
+        "test": "make test"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/oleksiyk/riakfs.git"
+    },
+    "readme": "Filesystem implementation in Riak that emulates node.js 'fs' module",
+    "readmeFilename": "README.md",
+    "license": "MIT"
+}
