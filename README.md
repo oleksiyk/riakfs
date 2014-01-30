@@ -30,7 +30,7 @@ All methods will return a promise as well as call a usual callback
 
 # License (MIT)
 
-Copyright (c) 2013 Oleksiy Krivoshey.
+Copyright (c) 2014 Oleksiy Krivoshey.
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
