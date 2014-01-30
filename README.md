@@ -4,23 +4,23 @@
 
 RiakFS is an implementation of filesystem in Riak that emulates node.js `fs` module:
 
-`open`
-`close`
-`read`
-`write`
-`readdir`
-`mkdir`
-`rmdir`
-`rename`
-`createReadStream`
-`createWriteStream`
-`unlink`
-`stat`
-`fstat`
-`utime`
-`futimes`
-`appendFile`
-`exists`
+*  `open`
+*  `close`
+*  `read`
+*  `write`
+*  `readdir`
+*  `mkdir`
+*  `rmdir`
+*  `rename`
+*  `createReadStream`
+*  `createWriteStream`
+*  `unlink`
+*  `stat`
+*  `fstat`
+*  `utime`
+*  `futimes`
+*  `appendFile`
+*  `exists`
 
 All methods will return a promise as well as call a usual callback
 
@@ -30,7 +30,8 @@ All methods will return a promise as well as call a usual callback
 
 # License (MIT)
 
-Copyright (c) 2014 Oleksiy Krivoshey.
+Copyright (c) 2014
+ Oleksiy Krivoshey.
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
