@@ -1,6 +1,6 @@
 "use strict";
 
-/* global describe, it, sinon */
+/* global describe, it, sinon, connect, before */
 
 // var Promise = require('bluebird');
 // var fs      = require('fs');
@@ -8,8 +8,12 @@
 
 describe('Other API', function() {
 
-    var riakfs = require(global.libPath)({
-        root: 'test-' + Date.now()
+    var riakfs;
+
+    before(function() {
+        return connect().then(function(_riakfs) {
+            riakfs = _riakfs
+        })
     })
 
     describe('#exists', function() {

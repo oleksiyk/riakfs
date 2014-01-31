@@ -24,6 +24,8 @@ RiakFS is an implementation of filesystem in Riak that emulates node.js `fs` mod
 
 All methods will return a promise as well as call a usual callback
 
+RiakFS makes use of Riak 2i (secondary indexes) so it requires leveldb backend.
+
 ## Authors
 
 * Oleksiy Krivoshey [https://github.com/oleksiyk](https://github.com/oleksiyk)

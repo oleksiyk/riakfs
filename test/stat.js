@@ -1,11 +1,15 @@
 "use strict";
 
-/* global describe, it, sinon */
+/* global describe, it, sinon, connect, before */
 
 describe('#stat', function() {
 
-    var riakfs = require(global.libPath)({
-        root: 'test-' + Date.now()
+    var riakfs;
+
+    before(function() {
+        return connect().then(function(_riakfs) {
+            riakfs = _riakfs
+        })
     })
 
     it('should return valid Stats object for directory', function() {

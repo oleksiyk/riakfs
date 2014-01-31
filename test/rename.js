@@ -1,13 +1,17 @@
 "use strict";
 
-/* global before, describe, it, sinon */
+/* global before, describe, it, sinon, connect */
 
 var Promise = require('bluebird')
 
 describe('#rename', function() {
 
-    var riakfs = require(global.libPath)({
-        root: 'test-' + Date.now()
+    var riakfs;
+
+    before(function() {
+        return connect().then(function(_riakfs) {
+            riakfs = _riakfs
+        })
     })
 
     before(function() {

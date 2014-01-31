@@ -1,6 +1,6 @@
 "use strict";
 
-/* global describe, it, testfiles */
+/* global describe, it, testfiles, before, connect */
 
 var Promise = require('bluebird');
 var path    = require('path')
@@ -8,8 +8,12 @@ var fs      = require('fs')
 
 describe('Stream', function() {
 
-    var riakfs = require(global.libPath)({
-        root: 'test-' + Date.now()
+    var riakfs;
+
+    before(function() {
+        return connect().then(function(_riakfs) {
+            riakfs = _riakfs
+        })
     })
 
     function copyFileFromFilesystem(from, to){
