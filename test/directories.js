@@ -154,4 +154,34 @@ describe('Directories', function() {
 
     })
 
+    describe('#makeTree', function() {
+
+        it('should create new directory hierarchy', function() {
+            return riakfs.makeTree('/dir1/dir2/dir3').then(function() {
+                return riakfs.stat('/dir1/dir2/dir3').then(function(stats) {
+                    stats.should.be.an('object')
+                    stats.isDirectory().should.eql(true)
+                })
+            })
+        })
+
+        it('should create directory hierarchy with existing prefix', function() {
+            return riakfs.makeTree('/dir1/dir2/dir3/dir4/dir5').then(function() {
+                return riakfs.stat('/dir1/dir2/dir3/dir4/dir5').then(function(stats) {
+                    stats.should.be.an('object')
+                    stats.isDirectory().should.eql(true)
+                })
+            })
+        })
+
+        it('should fail when part of prefix is existing file', function() {
+            return riakfs.open('/dir1/dir2/file', 'w').then(function(fd) {
+                return riakfs.close(fd)
+            }).then(function() {
+                return riakfs.makeTree('/dir1/dir2/file/dir4/dir5').should.be.rejected.and.eventually.have.property('code', 'ENOTDIR')
+            })
+        })
+
+    })
+
 })
