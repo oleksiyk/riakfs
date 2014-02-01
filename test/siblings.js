@@ -52,7 +52,7 @@ describe('Siblings', function() {
         })
     })
 
-    it.only('file siblings', function() {
+    it('file siblings', function() {
         return riakfs.open('/testFile', 'w').then(function(fd) {
             return riakfs.write(fd, 'test', 0, 4, null).then(function() {
                 return riakfs.close(fd)

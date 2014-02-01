@@ -9,7 +9,7 @@
     "version": "0.0.1",
     "main": "./lib/index.js",
     "dependencies": {
-        "riakpbc": "~=1.2.1",
+        "riakpbc": "git://github.com/oleksiyk/riakpbc#protobuf-21",
         "bluebird": "~=1.0.*",
         "lodash": "~=2.4.*",
         "mmmagic": "~=0.3.5",
