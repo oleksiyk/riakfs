@@ -31,6 +31,10 @@ All methods will return a promise as well as call a usual callback
 
 RiakFS makes use of Riak 2i (secondary indexes) so it requires leveldb backend.
 
+## Siblings resolution
+
+RiakFS uses `allow_mult=true` for its files bucket and tries to resolve possible [siblings](http://docs.basho.com/riak/latest/theory/concepts/Vector-Clocks/#Siblings) during read operations. It also will also handle tombstones conflicts (for example when doing mkdir immediately after rmdir).
+
 ## Authors
 
 * Oleksiy Krivoshey [https://github.com/oleksiyk](https://github.com/oleksiyk)
