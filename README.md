@@ -29,11 +29,29 @@ It also adds some convenient methods like:
 
 All methods will return a promise as well as call a usual callback
 
-RiakFS makes use of Riak 2i (secondary indexes) so it requires leveldb backend.
+RiakFS makes use of Riak 2i (secondary indexes) so it requires leveldb backend for both of its two buckets.
 
 ## Siblings resolution
 
-RiakFS uses `allow_mult=true` for its files bucket and tries to resolve possible [siblings](http://docs.basho.com/riak/latest/theory/concepts/Vector-Clocks/#Siblings) during read operations. It also will also handle tombstones conflicts (for example when doing mkdir immediately after rmdir).
+RiakFS uses `allow_mult=true` for its files (file meta information) bucket and tries to resolve possible [siblings](http://docs.basho.com/riak/latest/theory/concepts/Vector-Clocks/#Siblings) during read operations. It also will also handle tombstones conflicts (for example when doing mkdir immediately after rmdir).
+
+Chunks bucket uses `allow_mult=false`. This can be changed later.
+
+## Example
+
+```javascript
+require('riakfs')({
+    root: 'test-fs' // root is a bucket name prefix
+}).then(function(riakfs){
+    return riakfs.open('/testFile', 'w').then(function(fd){
+        return riakfs.write(fd, 'test', 0, 4, null).then(function() {
+            return riakfs.close(fd)
+        })
+    })
+})
+```
+
+See tests for more.
 
 ## Authors
 
