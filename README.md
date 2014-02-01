@@ -29,7 +29,7 @@ It also adds some convenient methods like:
 
 All methods will return a promise as well as call a usual callback
 
-RiakFS makes use of Riak 2i (secondary indexes) so it requires leveldb backend for both of its two buckets.
+RiakFS makes use of Riak 2i (secondary indexes) so it requires [LevelDB](http://docs.basho.com/riak/latest/ops/advanced/backends/leveldb/) backend for both of its two buckets.
 
 ## Siblings resolution
 
