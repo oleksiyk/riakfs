@@ -33,7 +33,7 @@ RiakFS makes use of Riak 2i (secondary indexes) so it requires leveldb backend f
 
 ## Siblings resolution
 
-RiakFS uses `allow_mult=true` for its files (file meta information) bucket and tries to resolve possible [siblings](http://docs.basho.com/riak/latest/theory/concepts/Vector-Clocks/#Siblings) during read operations. It also will also handle tombstones conflicts (for example when doing mkdir immediately after rmdir).
+RiakFS uses `allow_mult=true` for its files (file meta information) bucket and tries to resolve possible [siblings](http://docs.basho.com/riak/latest/theory/concepts/Vector-Clocks/#Siblings) during read operations. It will also handle tombstones conflicts (for example when doing mkdir immediately after rmdir).
 
 Chunks bucket uses `allow_mult=false`. This can be changed later.
 
