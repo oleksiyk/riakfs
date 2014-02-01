@@ -157,7 +157,9 @@ describe('Directories', function() {
     describe('#makeTree', function() {
 
         it('should create new directory hierarchy', function() {
-            return riakfs.makeTree('/dir1/dir2/dir3').then(function() {
+            var cb = sinon.spy(function() {})
+            return riakfs.makeTree('/dir1/dir2/dir3', cb).then(function() {
+                cb.should.have.been.calledWith(null)
                 return riakfs.stat('/dir1/dir2/dir3').then(function(stats) {
                     stats.should.be.an('object')
                     stats.isDirectory().should.eql(true)
@@ -166,7 +168,9 @@ describe('Directories', function() {
         })
 
         it('should create directory hierarchy with existing prefix', function() {
-            return riakfs.makeTree('/dir1/dir2/dir3/dir4/dir5').then(function() {
+            var cb = sinon.spy(function() {})
+            return riakfs.makeTree('/dir1/dir2/dir3/dir4/dir5', cb).then(function() {
+                cb.should.have.been.calledWith(null)
                 return riakfs.stat('/dir1/dir2/dir3/dir4/dir5').then(function(stats) {
                     stats.should.be.an('object')
                     stats.isDirectory().should.eql(true)
@@ -175,10 +179,13 @@ describe('Directories', function() {
         })
 
         it('should fail when part of prefix is existing file', function() {
+            var cb = sinon.spy(function() {})
             return riakfs.open('/dir1/dir2/file', 'w').then(function(fd) {
                 return riakfs.close(fd)
             }).then(function() {
-                return riakfs.makeTree('/dir1/dir2/file/dir4/dir5').should.be.rejected.and.eventually.have.property('code', 'ENOTDIR')
+                return riakfs.makeTree('/dir1/dir2/file/dir4/dir5', cb).should.be.rejected.and.eventually.have.property('code', 'ENOTDIR')
+            }).then(function() {
+                cb.getCall(0).args[0].should.be.instanceOf(Error).and.have.property('code', 'ENOTDIR')
             })
         })
 
