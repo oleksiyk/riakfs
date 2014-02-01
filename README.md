@@ -2,7 +2,7 @@
 
 # RiakFS
 
-RiakFS is an implementation of filesystem in Riak that emulates node.js `fs` module:
+RiakFS is an implementation of filesystem in [Riak](http://basho.com/riak/) that emulates node.js `fs` module:
 
 *  `open`
 *  `close`
