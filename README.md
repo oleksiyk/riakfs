@@ -25,7 +25,7 @@ RiakFS is an implementation of filesystem in Riak that emulates node.js `fs` mod
 It also adds some convenient methods like:
 
 *  `makeTree`
-*
+*  `copy`
 
 All methods will return a promise as well as call a usual callback
 

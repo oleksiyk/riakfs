@@ -428,4 +428,39 @@ describe('Files', function() {
         })
     })
 
+    describe('#copy', function() {
+
+        testfiles.forEach(function(f) {
+            it('should copy file', function() {
+                var cb = sinon.spy(function() {})
+                var sourceFilename = '/copy1_' + path.basename(f.path)
+                var targetFilename = '/copy2_' + path.basename(f.path)
+
+                return Promise.promisify(fs.readFile)(f.path).then(function(data) {
+                    return riakfs.writeFile(sourceFilename, data)
+                })
+                .then(function() {
+                    return riakfs.copy(sourceFilename, targetFilename, cb)
+                })
+                .then(function() {
+                    cb.should.have.been.calledWith(null)
+                })
+                .then(function() {
+                    return riakfs.readFile(targetFilename).then(function(data) {
+                        data.length.should.be.eql(f.size)
+                        require('crypto').createHash('md5').update(data).digest('hex').should.be.eql(f.md5)
+                    })
+                })
+            })
+        })
+
+        it('should fail for missing source file', function() {
+            var cb = sinon.spy(function() {})
+            return riakfs.copy('/abracadabra1', '/abracadbra2', cb).should.be.rejected.and.eventually.have.property('code', 'ENOENT')
+                .then(function() {
+                    cb.getCall(0).args[0].should.be.instanceOf(Error).and.have.property('code', 'ENOENT')
+                })
+        })
+    })
+
 })
