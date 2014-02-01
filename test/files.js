@@ -45,7 +45,7 @@ describe('Files', function() {
                         fd.should.have.property('filename', '/testnewfile_' + flag)
                         fd.file.should.have.property('mtime').that.is.closeTo(new Date(), 500)
                         fd.file.should.have.property('ctime').that.is.closeTo(new Date(), 500)
-                        fd.file.should.have.property('length')
+                        fd.file.should.have.property('size')
 
                         cb.should.have.been.calledWith(null, fd)
                     })
@@ -106,13 +106,13 @@ describe('Files', function() {
             return riakfs.open('/testWriteFile', 'w').then(function(fd) {
                 return riakfs.write(fd, 'test', 0, 4, null).then(function() {
                     return riakfs.close(fd).then(function() {
-                        fd.file.should.have.property('length', 4)
+                        fd.file.should.have.property('size', 4)
                         fd.file.should.have.property('contentType', 'text/plain')
 
                         return riakfs.open('/testWriteFile', 'r').then(function(fd) {
-                            var buffer = new Buffer(fd.file.length)
-                            return riakfs.read(fd, buffer, 0, fd.file.length).then(function(length) {
-                                length.should.be.eql(fd.file.length)
+                            var buffer = new Buffer(fd.file.size)
+                            return riakfs.read(fd, buffer, 0, fd.file.size).then(function(length) {
+                                length.should.be.eql(fd.file.size)
                                 buffer.slice(0,length).toString().should.be.eql('test')
                             })
                         })
@@ -142,13 +142,13 @@ describe('Files', function() {
             })
             .then(function() {
                 return riakfs.close(fd).then(function() {
-                    fd.file.should.have.property('length', 5)
+                    fd.file.should.have.property('size', 5)
                     fd.file.should.have.property('contentType', 'text/plain')
 
                     return riakfs.open('/testWriteFile', 'r').then(function(fd) {
-                        var buffer = new Buffer(fd.file.length)
-                        return riakfs.read(fd, buffer, 0, fd.file.length).then(function(length) {
-                            length.should.be.eql(fd.file.length)
+                        var buffer = new Buffer(fd.file.size)
+                        return riakfs.read(fd, buffer, 0, fd.file.size).then(function(length) {
+                            length.should.be.eql(fd.file.size)
                             buffer.slice(0,length).toString().should.be.eql('abcde')
                         })
                     })
@@ -160,13 +160,13 @@ describe('Files', function() {
             return riakfs.open('/testWriteFileUtf8', 'w').then(function(fd) {
                 return riakfs.write(fd, 'тест', 0, 8, null).then(function() {
                     return riakfs.close(fd).then(function() {
-                        fd.file.should.have.property('length', 8)
+                        fd.file.should.have.property('size', 8)
                         fd.file.should.have.property('contentType', 'text/plain')
 
                         return riakfs.open('/testWriteFileUtf8', 'r').then(function(fd) {
-                            var buffer = new Buffer(fd.file.length)
-                            return riakfs.read(fd, buffer, 0, fd.file.length).then(function(length) {
-                                length.should.be.eql(fd.file.length)
+                            var buffer = new Buffer(fd.file.size)
+                            return riakfs.read(fd, buffer, 0, fd.file.size).then(function(length) {
+                                length.should.be.eql(fd.file.size)
                                 buffer.slice(0,length).toString().should.be.eql('тест')
                             })
                         })
@@ -183,13 +183,13 @@ describe('Files', function() {
                 })
                 .then(function() {
                     return riakfs.close(fd).then(function() {
-                        fd.file.should.have.property('length', 4)
+                        fd.file.should.have.property('size', 4)
                         fd.file.should.have.property('contentType', 'text/plain')
 
                         return riakfs.open('/testWriteFile', 'r').then(function(fd) {
-                            var buffer = new Buffer(fd.file.length)
-                            return riakfs.read(fd, buffer, 0, fd.file.length).then(function(length) {
-                                length.should.be.eql(fd.file.length)
+                            var buffer = new Buffer(fd.file.size)
+                            return riakfs.read(fd, buffer, 0, fd.file.size).then(function(length) {
+                                length.should.be.eql(fd.file.size)
                                 buffer.slice(0,length).toString().should.be.eql('test')
                             })
                         })
@@ -203,13 +203,13 @@ describe('Files', function() {
                 return riakfs.write(fd, '+test', 0, 5, null)
                 .then(function() {
                     return riakfs.close(fd).then(function() {
-                        fd.file.should.have.property('length', 9)
+                        fd.file.should.have.property('size', 9)
                         fd.file.should.have.property('contentType', 'text/plain')
 
                         return riakfs.open('/testWriteFile', 'r').then(function(fd) {
-                            var buffer = new Buffer(fd.file.length)
-                            return riakfs.read(fd, buffer, 0, fd.file.length).then(function(length) {
-                                length.should.be.eql(fd.file.length)
+                            var buffer = new Buffer(fd.file.size)
+                            return riakfs.read(fd, buffer, 0, fd.file.size).then(function(length) {
+                                length.should.be.eql(fd.file.size)
                                 buffer.slice(0,length).toString().should.be.eql('test+test')
                             })
                         })

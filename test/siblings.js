@@ -52,7 +52,7 @@ describe('Siblings', function() {
         })
     })
 
-    it('file siblings without proper content', function() {
+    it('file + file siblings without proper content', function() {
         var id, vclock;
         return riakfs.open('/testFile', 'w').then(function(fd) {
             id = fd.file.id;
@@ -63,14 +63,13 @@ describe('Siblings', function() {
                     head: true
                 }).then(function(_reply) {
                     vclock = _reply.vclock
-                }).then(function() {
                     return riakfs.close(fd)
                 })
             })
         })
         .then(function() {
             // make several siblings
-            return Promise.map([123, 456, 789], function(len) {
+            return Promise.map([0, 123, 456, 789], function(len) {
                 return riakfs.riak.put({
                     bucket: riakfs.filesBucket,
                     key: '/testFile',
@@ -96,7 +95,7 @@ describe('Siblings', function() {
         })
     })
 
-    it('deleted file sibling', function() {
+    it('file + deleted file sibling', function() {
         var id, vclock;
         return riakfs.open('/testDeletedFile', 'w').then(function(fd) {
             id = fd.file.id;
@@ -107,7 +106,6 @@ describe('Siblings', function() {
                     head: true
                 }).then(function(_reply) {
                     vclock = _reply.vclock
-                }).then(function() {
                     return riakfs.close(fd)
                 })
             })
@@ -121,6 +119,45 @@ describe('Siblings', function() {
         })
         .then(function() {
             return riakfs.stat('/testDeletedFile').should.be.rejected.and.eventually.have.property('code', 'ENOENT')
+        })
+    })
+
+    it('file + empty directory sibling', function() {
+        var id, vclock;
+        return riakfs.open('/testDirOrFile', 'w').then(function(fd) {
+            id = fd.file.id;
+            return riakfs.write(fd, 'test', 0, 4, null).then(function() {
+                return riakfs.riak.get({
+                    bucket: riakfs.filesBucket,
+                    key: '/testDirOrFile',
+                    head: true
+                }).then(function(_reply) {
+                    vclock = _reply.vclock
+                    return riakfs.close(fd)
+                })
+            })
+        })
+        .then(function() {
+            return riakfs.riak.put({
+                bucket: riakfs.filesBucket,
+                key: '/testDirOrFile',
+                vclock: vclock,
+                content: {
+                    value: JSON.stringify({
+                        ctime: new Date(),
+                        mtime: new Date(),
+                        isDirectory: true
+                    }),
+                    content_type: 'application/json'
+                }
+            })
+        })
+        .then(function() {
+            return riakfs.stat('/testDirOrFile').then(function(stats) {
+                stats.should.be.an('object').and.have.property('file').that.have.property('id')
+                stats.file.id.should.be.eql(id)
+                stats.size.should.be.eql(4)
+            })
         })
     })
 
