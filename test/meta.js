@@ -4,7 +4,7 @@
 
 var Promise = require('bluebird')
 
-describe.only('#meta', function() {
+describe('#meta', function() {
 
     var riakfs;
 
