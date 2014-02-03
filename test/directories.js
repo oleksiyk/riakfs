@@ -96,9 +96,7 @@ describe('Directories', function() {
                 return Promise.all([
                     riakfs.mkdir('/readdir/directory'),
 
-                    riakfs.open('/readdir/file', 'w').then(function(fd) {
-                        return riakfs.close(fd)
-                    })
+                    riakfs.writeFile('/readdir/file', 'test')
                 ]).then(function() {
                     return Promise.all([
                         riakfs.mkdir('/readdir/directory/level2'),
