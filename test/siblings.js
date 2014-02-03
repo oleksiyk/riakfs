@@ -1,9 +1,11 @@
 "use strict";
 
-/* global before, describe, it, connect */
+/* global before, describe, it, connect, testfiles */
 
 var Promise = require('bluebird')
 var uuid    = require('node-uuid');
+var path    = require('path');
+var fs      = require('fs')
 
 describe('Siblings', function() {
 
@@ -52,45 +54,41 @@ describe('Siblings', function() {
         })
     })
 
-    it('file + file siblings without proper content', function() {
-        var id, vclock;
-        return riakfs.open('/testFile', 'w').then(function(fd) {
-            id = fd.file.id;
-            return riakfs.write(fd, 'test', 0, 4, null).then(function() {
-                return riakfs.riak.get({
-                    bucket: riakfs.filesBucket,
-                    key: '/testFile',
-                    head: true
-                }).then(function(_reply) {
-                    vclock = _reply.vclock
-                    return riakfs.close(fd)
+    testfiles.forEach(function(f) {
+        it('file + file siblings without proper content', function() {
+            var id;
+            return Promise.promisify(fs.readFile)(f.path).then(function(data) {
+                return riakfs.writeFile('/' + path.basename(f.path), data)
+            })
+            .then(function() {
+                return riakfs.stat('/' + path.basename(f.path)).then(function(stats) {
+                    id = stats.file.id
                 })
             })
-        })
-        .then(function() {
-            // make several siblings
-            return Promise.map([0, 123, 456, 789], function(len) {
-                return riakfs.riak.put({
-                    bucket: riakfs.filesBucket,
-                    key: '/testFile',
-                    vclock: vclock,
-                    content: {
-                        value: JSON.stringify({
-                            id: uuid.v1(),
-                            ctime: new Date(),
-                            mtime: new Date(),
-                            length: len
-                        }),
-                        content_type: 'application/json'
-                    }
+            .then(function() {
+                // make several siblings
+                return Promise.map([0, 123, 456, 789], function(len) {
+                    return riakfs.riak.put({
+                        bucket: riakfs.filesBucket,
+                        key: '/' + path.basename(f.path),
+                        content: {
+                            value: JSON.stringify({
+                                id: uuid.v1(),
+                                ctime: new Date(),
+                                mtime: new Date(),
+                                length: len
+                            }),
+                            content_type: 'application/json'
+                        }
+                    })
                 })
             })
-        })
-        .then(function() {
-            return riakfs.stat('/testFile').then(function(stats) {
-                stats.should.be.an('object')
-                stats.file.id.should.be.eql(id)
-                stats.size.should.be.eql(4)
+            .then(function() {
+                return riakfs.stat('/' + path.basename(f.path)).then(function(stats) {
+                    stats.should.be.an('object')
+                    stats.file.id.should.be.eql(id)
+                    stats.size.should.be.eql(f.size)
+                })
             })
         })
     })

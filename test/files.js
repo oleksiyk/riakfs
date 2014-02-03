@@ -5,6 +5,7 @@
 var Promise = require('bluebird');
 var fs      = require('fs');
 var path    = require('path')
+var _       = require('lodash');
 
 describe('Files', function() {
 
@@ -415,12 +416,14 @@ describe('Files', function() {
                             return Promise.all([
                                 riakfs.stat(filename).should.be.rejected.and.eventually.have.property('code', 'ENOENT'),
 
-                                riakfs.riak.getIndexAll({
-                                    bucket: riakfs.chunksBucket,
-                                    index: riakfs.chunksIndex,
-                                    qtype: 0,
-                                    key: file.file.id
-                                }).should.eventually.be.null
+                                Promise.map(_.range(Math.ceil(file.size / require('../lib/chunk').CHUNK_SIZE)), function(n) {
+                                    var key = file.file.id + ':' + n
+                                    return riakfs.riak.get({
+                                        bucket: riakfs.chunksBucket,
+                                        key: key,
+                                        head: true
+                                    }).should.eventually.be.empty;
+                                })
                             ])
                         })
                 })
