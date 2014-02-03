@@ -51,6 +51,23 @@ require('riakfs')({
 })
 ```
 
+You can also save some custom meta information with files:
+
+```javascript
+var file = {
+    filename: '/testFile',
+    meta: {
+        someKey: 'someValue',
+        otherKey: {
+            subKey: 'subValue'
+        }
+    }
+}
+return riakfs.open(file, 'w').then(function(fd){
+    ...
+})
+```
+
 See tests for more.
 
 ## Authors
