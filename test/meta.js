@@ -102,4 +102,120 @@ describe('#meta', function() {
         })
     })
 
+    it('#updateMeta should fully update meta information', function() {
+        var file = {
+            filename: '/testFile5',
+            meta: {
+                someKey: 'someValue5'
+            }
+        }
+
+        return riakfs.writeFile(file, 'test')
+        .then(function() {
+            return riakfs.stat(file.filename).then(function(stats) {
+                stats.should.be.an('object')
+                stats.size.should.eql(4)
+                stats.file.meta.should.be.an('object').and.have.property('someKey', 'someValue5')
+            })
+        })
+        .then(function() {
+            file.meta = {
+                someNewKey: 'someNewValue'
+            }
+            return riakfs.updateMeta(file.filename, file)
+        })
+        .then(function() {
+            return riakfs.stat(file.filename).then(function(stats) {
+                stats.should.be.an('object')
+                stats.file.meta.should.be.an('object').and.have.property('someNewKey', 'someNewValue')
+                stats.file.meta.should.not.have.property('someKey')
+            })
+        })
+    })
+
+    it('#updateMeta should save new meta information', function() {
+        var file = {
+            filename: '/testFile7',
+            meta: {
+                someKey: 'someValue'
+            }
+        }
+
+        return riakfs.writeFile(file.filename, 'test')
+        .then(function() {
+            return riakfs.stat(file.filename).then(function(stats) {
+                stats.should.be.an('object')
+                stats.size.should.eql(4)
+                stats.file.should.not.have.property('meta')
+            })
+        })
+        .then(function() {
+            return riakfs.updateMeta(file.filename, file)
+        })
+        .then(function() {
+            return riakfs.stat(file.filename).then(function(stats) {
+                stats.should.be.an('object')
+                stats.file.meta.should.be.an('object').and.have.property('someKey', 'someValue')
+            })
+        })
+    })
+
+    it('#setMeta should save merge meta information with file', function() {
+        var file = {
+            filename: '/testFile6',
+            meta: {
+                someKey: 'someValue6'
+            }
+        }
+
+        return riakfs.writeFile(file, 'test')
+        .then(function() {
+            return riakfs.stat(file.filename).then(function(stats) {
+                stats.should.be.an('object')
+                stats.size.should.eql(4)
+                stats.file.meta.should.be.an('object').and.have.property('someKey', 'someValue6')
+            })
+        })
+        .then(function() {
+            file.meta = {
+                someNewKey: 'someNewValue'
+            }
+            return riakfs.setMeta(file.filename, file)
+        })
+        .then(function() {
+            return riakfs.stat(file.filename).then(function(stats) {
+                stats.should.be.an('object')
+                stats.file.meta.should.be.an('object').and.have.property('someNewKey', 'someNewValue')
+                stats.file.meta.should.have.property('someKey', 'someValue6')
+            })
+        })
+    })
+
+    it('#setMeta should set meta information', function() {
+        var file = {
+            filename: '/testFile8',
+            meta: {
+                someKey: 'someValue'
+            }
+        }
+
+        return riakfs.writeFile(file.filename, 'test')
+        .then(function() {
+            return riakfs.stat(file.filename).then(function(stats) {
+                stats.should.be.an('object')
+                stats.size.should.eql(4)
+                stats.file.should.not.have.property('meta')
+            })
+        })
+        .then(function() {
+            return riakfs.setMeta(file.filename, file)
+        })
+        .then(function() {
+            return riakfs.stat(file.filename).then(function(stats) {
+                stats.should.be.an('object')
+                stats.file.meta.should.be.an('object').and.have.property('someKey', 'someValue')
+            })
+        })
+    })
+
 })
