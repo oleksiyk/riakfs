@@ -20,9 +20,6 @@ The following methods are implemented:
 *  `futimes`
 *  `appendFile`
 *  `exists`
-
-Streams:
-
 *  `createReadStream`
 *  `createWriteStream`
 
@@ -30,14 +27,15 @@ Streams:
 It also adds some convenient methods like:
 
 *  `makeTree` - recursively create directory tree
-*  `copy` - copy files
+*  `copy` - copy files (within riakfs)
 *  `updateMeta` and `setMeta` - manipulate custom metadata saved with files
 
 All methods will return a [promise](https://github.com/petkaantonov/bluebird) as well as call a usual callback
 
 ## Implementation
 
-File metatadata is stored separately from data chunks (256kb each).
+Files are stored in two buckets: `fs.files` and `fs.chunks`. First one is used for storing file metadata such as file size, mtime, ctime, contentType, etc as well as parent directory index (2i). Keys in `fs.files` bucket are full file paths ('/a/b/c/d.txt'). Actual file data is divided into chunks (256kb each) and stored in `fs.chunks` bucket.
+
 RiakFS makes use of Riak 2i (secondary indexes) so it requires [LevelDB](http://docs.basho.com/riak/latest/ops/advanced/backends/leveldb/) backend.
 
 ## Siblings resolution
