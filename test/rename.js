@@ -151,7 +151,7 @@ describe('#rename', function() {
         })
     })
 
-    it('should rename (move) directory recursively to existing empty directory', function() {
+    it('should rename (move) directory recursively', function() {
         var cb = sinon.spy(function() {})
 
         return createTestHierachy('/t10').then(function() {
@@ -174,6 +174,37 @@ describe('#rename', function() {
                     })
                     .then(function() {
                         return riakfs.readdir('/t10/zzz/dir2').then(function(list) {
+                            list.should.be.an('array').and.have.length(2)
+                            list.should.include('dir3')
+                            list.should.include('file1')
+                        })
+                    })
+            })
+        })
+    })
+
+    it('should rename (move) directory recursively to existing empty dir', function() {
+        var cb = sinon.spy(function() {})
+
+        return createTestHierachy('/t11').then(function() {
+            return riakfs.rename('/t11/dir1', '/t11/dir2', cb).then(function() {
+                cb.should.have.been.calledWith(null)
+
+                return riakfs.readdir('/t11').then(function(list) {
+                    list.should.be.an('array').and.have.length(1)
+                    list.should.contain('dir2')
+                    list.should.not.contain('dir1')
+                })
+                    .then(function() {
+                        return riakfs.readdir('/t11/dir2').then(function(list) {
+                            list.should.be.an('array').and.have.length(3)
+                            list.should.include('dir2')
+                                .and.include('file2')
+                                .and.include('file1')
+                        })
+                    })
+                    .then(function() {
+                        return riakfs.readdir('/t11/dir2/dir2').then(function(list) {
                             list.should.be.an('array').and.have.length(2)
                             list.should.include('dir3')
                             list.should.include('file1')
