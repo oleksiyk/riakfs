@@ -34,7 +34,7 @@ All methods will return a [promise](https://github.com/petkaantonov/bluebird) as
 
 ## Implementation
 
-Files are stored in two buckets: `fs.files` and `fs.chunks`. First one is used for storing file metadata such as file size, mtime, ctime, contentType, etc as well as parent directory index (2i). Keys in `fs.files` bucket are full file paths ('/a/b/c/d.txt'). Actual file data is divided into chunks (256kb each) and stored in `fs.chunks` bucket.
+Files are stored in two buckets: `fs.files` and `fs.chunks` (you can use your own names with `root` option, see example below). First one is used for storing file metadata such as file size, mtime, ctime, contentType, etc as well as parent directory index (2i). Keys in `fs.files` bucket are full file paths ('/a/b/c/d.txt'). Actual file data is divided into chunks (256kb each) and stored in `fs.chunks` bucket.
 
 RiakFS makes use of Riak 2i (secondary indexes) so it requires [LevelDB](http://docs.basho.com/riak/latest/ops/advanced/backends/leveldb/) backend.
 
@@ -48,7 +48,7 @@ Chunks bucket uses `allow_mult=false`. This can be changed later.
 
 ```javascript
 require('riakfs')({
-    root: 'test-fs' // root is a bucket name prefix
+    root: 'test-fs' // root is a bucket name prefix, bucket names will be: test-fs.files, test-fs.chunks
 }).then(function(riakfs){
     return riakfs.open('/testFile', 'w').then(function(fd){
         return riakfs.write(fd, 'test', 0, 4, null).then(function() {
