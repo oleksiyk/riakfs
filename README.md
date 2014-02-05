@@ -2,7 +2,8 @@
 
 # RiakFS
 
-RiakFS is an implementation of filesystem in [Riak](http://basho.com/riak/) that emulates node.js `fs` module:
+RiakFS is an implementation of filesystem in [Riak](http://basho.com/riak/) that emulates node.js `fs` module.
+The following methods are implemented:
 
 *  `open`
 *  `close`
@@ -12,8 +13,6 @@ RiakFS is an implementation of filesystem in [Riak](http://basho.com/riak/) that
 *  `mkdir`
 *  `rmdir`
 *  `rename`
-*  `createReadStream`
-*  `createWriteStream`
 *  `unlink`
 *  `stat`
 *  `fstat`
@@ -22,13 +21,23 @@ RiakFS is an implementation of filesystem in [Riak](http://basho.com/riak/) that
 *  `appendFile`
 *  `exists`
 
+Streams:
+
+*  `createReadStream`
+*  `createWriteStream`
+
+
 It also adds some convenient methods like:
 
-*  `makeTree`
-*  `copy`
+*  `makeTree` - recursively create directory tree
+*  `copy` - copy files
+*  `updateMeta` and `setMeta` - manipulate custom metadata saved with files
 
-All methods will return a promise as well as call a usual callback
+All methods will return a [promise](https://github.com/petkaantonov/bluebird) as well as call a usual callback
 
+## Implementation
+
+File metatadata is stored separately from data chunks (256kb each).
 RiakFS makes use of Riak 2i (secondary indexes) so it requires [LevelDB](http://docs.basho.com/riak/latest/ops/advanced/backends/leveldb/) backend.
 
 ## Siblings resolution
