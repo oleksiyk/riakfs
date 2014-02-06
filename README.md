@@ -36,7 +36,7 @@ All methods will return a [promise](https://github.com/petkaantonov/bluebird) as
 
 Files are stored in two buckets: `fs.files` and `fs.chunks` (you can use your own names with `root` option, see example below). First one is used for storing file metadata such as file size, mtime, ctime, contentType, etc as well as parent directory index (2i). Keys in `fs.files` bucket are full file paths ('/a/b/c/d.txt'). Actual file data is divided into chunks (256kb each) and stored in `fs.chunks` bucket.
 
-RiakFS makes use of Riak 2i (secondary indexes) so it requires [LevelDB](http://docs.basho.com/riak/latest/ops/advanced/backends/leveldb/) backend.
+RiakFS makes use of Riak 2i (secondary indexes) so it requires [LevelDB](http://docs.basho.com/riak/latest/ops/advanced/backends/leveldb/) backend. 2i is only used for finding directory contents (e.g. `readdir`).
 
 ## Siblings resolution
 
