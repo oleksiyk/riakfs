@@ -46,6 +46,8 @@ Chunks bucket uses `allow_mult=false`. This can be changed later.
 
 ## Example
 
+open/write/close:
+
 ```javascript
 require('riakfs')({
     root: 'test-fs' // root is a bucket name prefix, bucket names will be: test-fs.files, test-fs.chunks
@@ -55,6 +57,27 @@ require('riakfs')({
             return riakfs.close(fd)
         })
     })
+})
+```
+
+writeFile (copy file from hard drive):
+
+```javascript
+Promise.promisify(fs.readFile)('/someFile.jpg').then(function(data) {
+    return riakfs.writeFile('/someFile.jpg', data)
+})
+```
+
+streams:
+
+```javascript
+var readStream = fs.createReadStream('/someFile.jpg')
+var writeStream = riakfs.createWriteStream('/someFile.jpg')
+
+readStream.pipe(writeStream)
+
+writeStream.on('close', function() {
+    // done!
 })
 ```
 
