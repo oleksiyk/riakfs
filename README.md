@@ -100,6 +100,10 @@ return riakfs.open(file, 'w').then(function(fd){
 
 See tests for more.
 
+## Status
+
+Not tested in production yet. Under development. Pull requests are welcomed. Tested with Riak 1.4 and Riak 2.0pre.
+
 ## Authors
 
 * Oleksiy Krivoshey [https://github.com/oleksiyk](https://github.com/oleksiyk)
