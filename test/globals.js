@@ -38,7 +38,7 @@ global.testfiles = [
 ]
 
 global.connect = function() {
-    return require(global.libPath)({
+    return require(global.libPath).create({
         root: 'test-' + Date.now()
     })
 }

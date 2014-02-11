@@ -49,7 +49,7 @@ Chunks bucket uses `allow_mult=false`. This can be changed later.
 open/write/close:
 
 ```javascript
-require('riakfs')({
+require('riakfs').create({
     root: 'test-fs' // root is a bucket name prefix, bucket names will be: test-fs.files, test-fs.chunks
 }).then(function(riakfs){
     return riakfs.open('/testFile', 'w').then(function(fd){
