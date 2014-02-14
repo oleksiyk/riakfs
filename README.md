@@ -51,7 +51,8 @@ open/write/close:
 ```javascript
 require('riakfs').create({
     root: 'test-fs' // root is a bucket name prefix, bucket names will be: test-fs.files, test-fs.chunks
-}).then(function(riakfs){
+})
+.then(function(riakfs){
     return riakfs.open('/testFile', 'w').then(function(fd){
         return riakfs.write(fd, 'test', 0, 4, null).then(function() {
             return riakfs.close(fd)
@@ -81,7 +82,7 @@ writeStream.on('close', function() {
 })
 ```
 
-You can also save some custom meta information with files:
+You can also save some custom meta information with files by passing an object instead of string path to `open`, `writeFile` or `createWriteStream`:
 
 ```javascript
 var file = {
@@ -98,7 +99,9 @@ return riakfs.open(file, 'w').then(function(fd){
 })
 ```
 
-Saved metadata can be retrived with a `stat` or `open` calls:
+or use `updateMeta` and `setMeta` methods
+
+Saved metadata can be retrieved with a `stat` or `open` calls:
 
 ```javascript
 return riakfs.stat('/testFile').then(function(stats){
