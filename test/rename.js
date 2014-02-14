@@ -214,4 +214,15 @@ describe('#rename', function() {
         })
     })
 
+    it('should rename when new is old + suffix', function() {
+        var cb = sinon.spy(function() {})
+
+        return createTestHierachy('/t12').then(function() {
+            return riakfs.rename('/t12/dir1', '/t12/dir12', cb).then(function() {
+                cb.should.have.been.calledWith(null)
+                return riakfs.stat('/t12/dir12').should.eventually.be.an('object')
+            })
+        })
+    })
+
 })
