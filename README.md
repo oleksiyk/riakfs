@@ -98,6 +98,20 @@ return riakfs.open(file, 'w').then(function(fd){
 })
 ```
 
+Saved metadata can be retrived with a `stat` or `open` calls:
+
+```javascript
+return riakfs.stat('/testFile').then(function(stats){
+    // stats.file.meta
+})
+```
+
+```javascript
+return riakfs.open('/testFile').then(function(fd){
+    // fd.file.meta
+})
+```
+
 See tests for more.
 
 ## Application
