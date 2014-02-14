@@ -100,6 +100,11 @@ return riakfs.open(file, 'w').then(function(fd){
 
 See tests for more.
 
+## Application
+
+The idea is that this module (connected `riakfs` instance) can be used as a drop-in replacement for node `fs` module.
+For example it can be used with [nodeftpd](https://github.com/sstur/nodeftpd)
+
 ## Status
 
 Not tested in production yet. Under development. Pull requests are welcomed. Tested with Riak 1.4 and Riak 2.0pre.
