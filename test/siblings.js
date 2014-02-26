@@ -3,7 +3,7 @@
 /* global before, describe, it, connect, testfiles */
 
 var Promise = require('bluebird')
-var uuid    = require('node-uuid');
+var uid2    = require('uid2');
 var path    = require('path');
 var fs      = require('fs')
 
@@ -73,7 +73,7 @@ describe('Siblings', function() {
                         key: '/' + path.basename(f.path),
                         content: {
                             value: JSON.stringify({
-                                id: uuid.v1(),
+                                id: uid2(32),
                                 ctime: new Date(),
                                 mtime: new Date(),
                                 length: len
