@@ -87,9 +87,7 @@ describe('#meta', function() {
             }]
         }
 
-        return riakfs.open(file, 'w').then(function(fd) {
-            return riakfs.close(fd)
-        })
+        return riakfs.writeFile(file, '1234567')
         .then(function() {
             return riakfs.findAll({
                 index: 'test_bin',
@@ -98,6 +96,34 @@ describe('#meta', function() {
                 search.should.be.an('object')
                 search.keys.should.be.an('array').and.have.length(1)
                 search.keys[0].should.be.eql(file.filename)
+            })
+        })
+    })
+
+    it('#findAll should find renamed files by custom indexes', function() {
+        var file = {
+            filename: '/testFile41',
+            meta: {
+                someKey: 'someValue4'
+            },
+            indexes: [{
+                key: 'test_rename_bin',
+                value: 'testValue'
+            }]
+        }
+
+        return riakfs.writeFile(file, '1234567')
+        .then(function() {
+            return riakfs.rename(file.filename, '/testFile41-renamed')
+        })
+        .then(function() {
+            return riakfs.findAll({
+                index: 'test_rename_bin',
+                key: 'testValue'
+            }).then(function(search) {
+                search.should.be.an('object')
+                search.keys.should.be.an('array').and.have.length(1)
+                search.keys[0].should.be.eql('/testFile41-renamed')
             })
         })
     })
