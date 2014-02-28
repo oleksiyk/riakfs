@@ -279,6 +279,19 @@ describe('Files', function() {
     })
 
     describe('#read', function() {
+        it('should handle empty file', function() {
+            return riakfs.open('/testReadFile', 'w').then(function(fd) {
+                return riakfs.close(fd)
+            })
+            .then(function() {
+                return riakfs.open('/testReadFile', 'r')
+            })
+            .then(function(fd) {
+                var buffer = new Buffer(100)
+                return riakfs.read(fd, buffer, 0, 10, 0)
+            })
+        })
+
         it('should read data from file', function() {
             return riakfs.open('/testReadFile', 'w').then(function(fd) {
                 return riakfs.write(fd, 'test', 0, 4, null).then(function() {
