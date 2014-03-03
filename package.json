@@ -8,6 +8,7 @@
     },
     "version": "0.0.1",
     "main": "./lib/index.js",
+    "keywords": ["riak", "fs"],
     "dependencies": {
         "riakpbc-promised": "git://github.com/oleksiyk/riakpbc-promised",
         "bluebird": "~=1.0.*",
