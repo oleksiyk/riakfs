@@ -47,6 +47,7 @@ describe('Files', function() {
                         fd.file.should.have.property('mtime').that.is.closeTo(new Date(), 500)
                         fd.file.should.have.property('ctime').that.is.closeTo(new Date(), 500)
                         fd.file.should.have.property('size')
+                        fd.file.should.have.property('version', -1)
 
                         cb.should.have.been.calledWith(null, fd)
                     })
@@ -108,6 +109,7 @@ describe('Files', function() {
                 return riakfs.write(fd, 'test', 0, 4, null).then(function() {
                     return riakfs.close(fd).then(function() {
                         fd.file.should.have.property('size', 4)
+                        fd.file.should.have.property('version', 0)
                         fd.file.should.have.property('contentType', 'text/plain')
 
                         return riakfs.open('/testWriteFile', 'r').then(function(fd) {
@@ -144,6 +146,7 @@ describe('Files', function() {
             .then(function() {
                 return riakfs.close(fd).then(function() {
                     fd.file.should.have.property('size', 5)
+                    fd.file.should.have.property('version', 1)
                     fd.file.should.have.property('contentType', 'text/plain')
 
                     return riakfs.open('/testWriteFile', 'r').then(function(fd) {
@@ -185,6 +188,7 @@ describe('Files', function() {
                 .then(function() {
                     return riakfs.close(fd).then(function() {
                         fd.file.should.have.property('size', 4)
+                        fd.file.should.have.property('version', 2)
                         fd.file.should.have.property('contentType', 'text/plain')
 
                         return riakfs.open('/testWriteFile', 'r').then(function(fd) {
@@ -205,6 +209,7 @@ describe('Files', function() {
                 .then(function() {
                     return riakfs.close(fd).then(function() {
                         fd.file.should.have.property('size', 9)
+                        fd.file.should.have.property('version', 3)
                         fd.file.should.have.property('contentType', 'text/plain')
 
                         return riakfs.open('/testWriteFile', 'r').then(function(fd) {
