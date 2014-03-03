@@ -44,6 +44,12 @@ RiakFS uses `allow_mult=true` for its files (file meta information) bucket and t
 
 Chunks bucket uses `allow_mult=false`. This can be changed later.
 
+## Installation
+
+```
+$ npm install riakfs
+```
+
 ## Example
 
 open/write/close:
