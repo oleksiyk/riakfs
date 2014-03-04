@@ -123,6 +123,27 @@ return riakfs.open('/testFile').then(function(fd){
 
 See tests for more.
 
+## Events
+
+RiakFS can optionally trigger events on file/dir changes:
+
+```javascript
+// pass events: true option to enable events
+return riakfs.create({ events: true }).then(function(fs){
+    fs.on('change', function(filename, info) { // triggered when file data is changed
+    })
+
+    fs.on('new', function(filename, info) { // triggered when new file or directory is created
+    })
+
+    fs.on('rename', function(old, _new, info) { // triggered when file or dir is renamed
+    })
+
+    fs.on('delete', function(filename, info) { // triggered when file or directory is deleted
+    })
+})
+```
+
 ## Application
 
 The idea is that this module (connected `riakfs` instance) can be used as a drop-in replacement for node `fs` module.
