@@ -131,6 +131,23 @@ describe('#rename', function() {
         })
     })
 
+    it('should move single file to new dir', function() {
+        var cb = sinon.spy(function() {})
+        return createTestHierachy('/t81').then(function() {
+            return riakfs.rename('/t81/dir1/file1', '/t81/dir2/file1', cb)
+                .then(function() {
+                    cb.should.have.been.calledWith(null)
+                    return Promise.all([
+                        riakfs.readdir('/t81/dir1'),
+                        riakfs.readdir('/t81/dir2')
+                    ]).spread(function(list1, list2) {
+                        list1.should.not.contain('file1')
+                        list2.should.contain('file1')
+                    })
+                })
+        })
+    })
+
     it('should rename (move) single file removing existing file', function() {
         var cb = sinon.spy(function() {})
         return createTestHierachy('/t9').then(function() {
