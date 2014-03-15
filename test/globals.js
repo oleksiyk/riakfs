@@ -39,7 +39,11 @@ global.testfiles = [
 
 global.connect = function() {
     return require(global.libPath).create({
-        root: 'TeSt-' + Date.now()
+        root: 'TeSt-' + Date.now(),
+        /*riak: {
+            host: '127.0.0.1',
+            port: 10017
+        },*/
     })
 }
 
