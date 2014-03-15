@@ -49,6 +49,9 @@ describe('Stream', function() {
             var d = shasum.digest('hex');
             deferred.resolve(d)
         });
+        s.on('error', function(err) {
+            deferred.reject(err)
+        })
         return deferred.promise;
     }
 
