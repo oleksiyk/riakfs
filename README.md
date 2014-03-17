@@ -153,6 +153,11 @@ For example it can be used with [nodeftpd](https://github.com/sstur/nodeftpd)
 
 Not tested in production yet. Under development. Pull requests are welcomed. Tested with Riak 1.4 and Riak 2.0pre.
 
+## Riak settings
+I suggest to increase erlang network buffer size (See: http://www.erlang.org/doc/man/erl.html#%2bzdbbl)
+In version 1.4.x this parameter is located in vm.args file. The value is in kilobytes (so 32768 - 32MB).
+In version 2.0 the parameter is called erlang.distribution_buffer_size, should be put in riak.conf and the value is in bytes (33554432 = 32MB).
+
 ## Authors
 
 * Oleksiy Krivoshey [https://github.com/oleksiyk](https://github.com/oleksiyk)
