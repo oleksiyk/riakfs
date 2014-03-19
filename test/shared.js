@@ -4,7 +4,7 @@
 
 var Promise = require('bluebird');
 
-describe('#shared', function() {
+describe('#shared directory', function() {
 
     var riakfs1, riakfs2, riakfs3;
 
@@ -250,7 +250,7 @@ describe('#shared', function() {
     })
 
     it('#makeTree - readonly', function() {
-        return riakfs3.makeTree('/Shared/fs1-dir1/aa/bb/cc').should.be.rejected.and.eventually.have.property('code', 'EACCES')
+        return riakfs3.makeTree('/Shared/fs1-dir1/aa1/bb1/cc1').should.be.rejected.and.eventually.have.property('code', 'EACCES')
     })
 
     it.skip('#rmdir - shared folder', function() {
