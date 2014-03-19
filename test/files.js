@@ -179,6 +179,25 @@ describe('Files', function() {
             })
         })
 
+        it('should create file with utf8 chars in the name', function() {
+            return riakfs.open('/тестФайл', 'w').then(function(fd) {
+                return riakfs.write(fd, 'тест', 0, 8, null).then(function() {
+                    return riakfs.close(fd).then(function() {
+                        fd.file.should.have.property('size', 8)
+                        fd.file.should.have.property('contentType', 'text/plain')
+
+                        return riakfs.open('/тестФайл', 'r').then(function(fd) {
+                            var buffer = new Buffer(fd.file.size)
+                            return riakfs.read(fd, buffer, 0, fd.file.size).then(function(length) {
+                                length.should.be.eql(fd.file.size)
+                                buffer.slice(0,length).toString().should.be.eql('тест')
+                            })
+                        })
+                    })
+                })
+            })
+        })
+
         it('should write data to file in several steps', function() {
             return riakfs.open('/testWriteFile', 'w').then(function(fd) {
                 return riakfs.write(fd, 'test', 0, 2, null)

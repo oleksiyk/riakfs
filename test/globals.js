@@ -1,5 +1,8 @@
 "use strict";
 
+var uid2 = require('uid2');
+var _    = require('lodash');
+
 global.libPath = (process && process.env && process.env.RIAKFS_COV)
     ? '../lib-cov'
     : '../lib';
@@ -37,13 +40,17 @@ global.testfiles = [
     }
 ]
 
-global.connect = function() {
-    return require(global.libPath).create({
-        root: 'TeSt-' + Date.now(),
-        /*riak: {
+global.connect = function(options) {
+    options = _.partialRight(_.merge, _.defaults)(options || {}, {
+        root: 'TeSt-' + uid2(8),
+        riak: {
             host: '127.0.0.1',
-            port: 10017
-        },*/
-    })
+            port: 8087
+        },
+        events: false,
+        sharedFs: false
+    });
+
+    return require(global.libPath).create(options)
 }
 
