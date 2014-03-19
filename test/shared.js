@@ -48,6 +48,30 @@ describe('#shared', function() {
         return riakfs1.share('/dir1', riakfs2.options.root, 'fs1-dir1').then(function() {
             return riakfs2.stat('/Shared/fs1-dir1').then(function(stats) {
                 stats.should.be.an('object')
+                stats.file.should.have.property('share').that.is.an('object')
+                stats.file.share.should.have.property('owner').that.is.an('object')
+                stats.file.share.owner.root.should.be.eql(riakfs1.options.root)
+                stats.file.share.owner.path.should.be.eql('/dir1')
+                stats.file.share.should.have.property('to').that.is.an('array').and.have.length(1)
+                stats.file.share.to[0].root.should.be.eql(riakfs2.options.root)
+                stats.file.share.to[0].path.should.be.eql('/Shared/fs1-dir1')
+                stats.isDirectory().should.eql(true)
+                stats.isFile().should.eql(false)
+            })
+        })
+    })
+
+    it('should create readonly target shared directory', function() {
+        return riakfs1.share('/dir1', riakfs3.options.root, 'fs1-dir1', true).then(function() {
+            return riakfs3.stat('/Shared/fs1-dir1').then(function(stats) {
+                stats.should.be.an('object')
+                stats.file.should.have.property('share').that.is.an('object')
+                stats.file.share.should.have.property('owner').that.is.an('object')
+                stats.file.share.owner.root.should.be.eql(riakfs1.options.root)
+                stats.file.share.owner.path.should.be.eql('/dir1')
+                stats.file.share.should.have.property('to').that.is.an('array').and.have.length(2)
+                stats.file.share.to[1].root.should.be.eql(riakfs3.options.root)
+                stats.file.share.to[1].path.should.be.eql('/Shared/fs1-dir1')
                 stats.isDirectory().should.eql(true)
                 stats.isFile().should.eql(false)
             })
@@ -60,8 +84,22 @@ describe('#shared', function() {
         })
     })
 
+    it('#readdir - readonly', function() {
+        return riakfs3.readdir('/Shared/fs1-dir1').then(function(list) {
+            list.should.contain('dir2').and.contain('file1')
+        })
+    })
+
     it('#stat', function() {
         return riakfs2.stat('/Shared/fs1-dir1/file1').then(function(stats) {
+            stats.should.be.an('object')
+            stats.isFile().should.eql(true)
+            stats.size.should.be.eql(5)
+        })
+    })
+
+    it('#stat - readonly', function() {
+        return riakfs3.stat('/Shared/fs1-dir1/file1').then(function(stats) {
             stats.should.be.an('object')
             stats.isFile().should.eql(true)
             stats.size.should.be.eql(5)
@@ -74,8 +112,21 @@ describe('#shared', function() {
         })
     })
 
+    it('#exists - readonly', function() {
+        return riakfs3.exists('/Shared/fs1-dir1/file1').then(function(exists) {
+            return exists.should.be.true
+        })
+    })
+
     it('#readFile', function() {
         return riakfs2.readFile('/Shared/fs1-dir1/file1', {encoding: 'utf8'}).then(function(data) {
+            data.length.should.be.eql(5)
+            data.should.be.a('string').and.eql('hello')
+        })
+    })
+
+    it('#readFile - readonly', function() {
+        return riakfs3.readFile('/Shared/fs1-dir1/file1', {encoding: 'utf8'}).then(function(data) {
             data.length.should.be.eql(5)
             data.should.be.a('string').and.eql('hello')
         })
@@ -94,6 +145,10 @@ describe('#shared', function() {
                 data.should.be.a('string').and.eql('hello2')
             })
         })
+    })
+
+    it('#writeFile - readonly', function() {
+        return riakfs3.writeFile('/Shared/fs1-dir1/file2', 'hello2').should.be.rejected.and.eventually.have.property('code', 'EACCES')
     })
 
     it('#updateMeta', function() {
@@ -123,10 +178,24 @@ describe('#shared', function() {
         })
     })
 
+    it('#updateMeta - readonly', function() {
+        var file = {
+            filename: '/Shared/fs1-dir1/testFile',
+            meta: {
+                someKey: 'someValue'
+            }
+        }
+        return riakfs3.updateMeta(file.filename, file).should.be.rejected.and.eventually.have.property('code', 'EACCES')
+    })
+
     it('#unlink', function() {
         return riakfs2.unlink('/Shared/fs1-dir1/file2').then(function() {
             return riakfs1.stat('/dir1/file2').should.be.rejected.and.eventually.have.property('code', 'ENOENT')
         })
+    })
+
+    it('#unlink - readonly', function() {
+        return riakfs3.unlink('/Shared/fs1-dir1/file1').should.be.rejected.and.eventually.have.property('code', 'EACCES')
     })
 
     it('#mkdir', function() {
@@ -138,9 +207,62 @@ describe('#shared', function() {
         })
     })
 
+    it('#mkdir - readonly', function() {
+        return riakfs3.mkdir('/Shared/fs1-dir1/dir4').should.be.rejected.and.eventually.have.property('code', 'EACCES')
+    })
+
     it('#rmdir', function() {
         return riakfs2.rmdir('/Shared/fs1-dir1/dir3').then(function() {
             return riakfs1.stat('/dir1/dir3').should.be.rejected.and.eventually.have.property('code', 'ENOENT')
+        })
+    })
+
+    it('#rmdir - readonly', function() {
+        return riakfs3.rmdir('/Shared/fs1-dir1/dir1').should.be.rejected.and.eventually.have.property('code', 'EACCES')
+    })
+
+    it('#copy', function() {
+        return riakfs2.writeFile('/testFile', 'hello').then(function() {
+            return riakfs2.copy('/testFile', '/Shared/fs1-dir1/testFileCopy')
+        })
+        .then(function() {
+            return riakfs1.stat('/dir1/testFileCopy').then(function(stats) {
+                stats.should.be.an('object')
+                stats.isFile().should.eql(true)
+                stats.size.should.be.eql(5)
+            })
+        })
+    })
+
+    it('#copy - readonly', function() {
+        return riakfs3.writeFile('/testFile', 'hello').then(function() {
+            return riakfs3.copy('/testFile', '/Shared/fs1-dir1/testFileCopy').should.be.rejected.and.eventually.have.property('code', 'EACCES')
+        })
+    })
+
+    it('#makeTree', function() {
+        return riakfs2.makeTree('/Shared/fs1-dir1/aa/bb/cc').then(function() {
+            return riakfs1.stat('/dir1/aa/bb/cc').then(function(stats) {
+                stats.should.be.an('object')
+                stats.isDirectory().should.eql(true)
+            })
+        })
+    })
+
+    it('#makeTree - readonly', function() {
+        return riakfs3.makeTree('/Shared/fs1-dir1/aa/bb/cc').should.be.rejected.and.eventually.have.property('code', 'EACCES')
+    })
+
+    it.skip('#rmdir - shared folder', function() {
+        return riakfs1.share('/dir2', riakfs2.options.root, 'fs1-dir2').then(function() {
+            return riakfs2.rmdir('/Shared/fs1-dir2').then(function() {
+                return riakfs1.stat('/dir2').should.be.rejected.and.eventually.have.property('code', 'ENOENT')
+            })
+            .then(function() {
+                return riakfs2.readdir('/Shared').then(function(list) {
+                    list.should.not.contain('fs1-dir2')
+                })
+            })
         })
     })
 
