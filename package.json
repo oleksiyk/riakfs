@@ -18,6 +18,7 @@
         "uid2": "~=0.0.3"
     },
     "devDependencies": {
+        "mocha": "~=1.18.2",
         "chai": "~=1.9.1",
         "sinon-chai": "~=2.5.0",
         "chai-as-promised": "~=4.1.1"
