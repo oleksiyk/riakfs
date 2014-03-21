@@ -24,9 +24,9 @@ describe('#shared directory', function() {
 
     before(function() {
         return Promise.all([
-            connect({sharedFs: sharedFs}),
-            connect({sharedFs: sharedFs}),
-            connect({sharedFs: sharedFs})
+            connect({shared: {fs: sharedFs}}),
+            connect({shared: {fs: sharedFs}}),
+            connect({shared: {fs: sharedFs}})
         ]).spread(function(_fs1, _fs2, _fs3) {
             riakfs1 = _fs1
             riakfs2 = _fs2
