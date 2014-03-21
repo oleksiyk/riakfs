@@ -144,6 +144,67 @@ return riakfs.create({ events: true }).then(function(fs){
 })
 ```
 
+### Shared directories
+
+RiakFS allows sharing directories between different filesystems (those with different `root` option).
+Given two filesystems: fs1 and fs2, one can share some directory from fs1 like this:
+
+```javascript
+fs1.share('/some/dir', fs2.options.root, 'alias')
+```
+
+or readonly:
+
+```javascript
+fs1.share('/some/dir', fs2.options.root, 'alias', true)
+```
+
+This will create a directory names `/Shared/alias` in fs1.
+
+You can read sharing info by `stat`ing on shared directories from both filesystems:
+
+from fs1:
+
+```javascript
+fs1.stat('/some/dir').then(function(stats){
+    // read stats.file.share:
+    /*
+    {
+        to: [ { root: 'fs2-root', alias: 'alias', readOnly: false } ],
+        owner: { root: 'fs1-root', path: '/some/dir' }
+    }
+     */
+})
+```
+
+same result from fs2:
+
+```javascript
+fs2.stat('/Shared/alias').then(function(stats){
+    // read stats.file.share:
+    /*
+    {
+        to: [ { root: 'fs2-root', alias: 'alias', readOnly: false } ],
+        owner: { root: 'fs1-root', path: '/some/dir' }
+    }
+     */
+})
+```
+
+#### Cancel sharing:
+
+from fs1:
+
+```javascript
+fs1.unshare('/some/dir', fs2.options.root) // this will cancel sharing with fs2
+```
+
+from fs2:
+
+```javascript
+fs2.unshare('/Shared/alias')
+```
+
 ## Application
 
 The idea is that this module (connected `riakfs` instance) can be used as a drop-in replacement for node `fs` module.

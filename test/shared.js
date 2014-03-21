@@ -139,6 +139,16 @@ describe('#shared directory', function() {
         })
     })
 
+    it('#stat - shared dir', function() {
+        return riakfs2.stat('/Shared/fs1-dir1').then(function(stats) {
+            stats.should.be.an('object')
+            stats.isDirectory().should.eql(true)
+            stats.file.should.have.property('share').that.is.an('object')
+            var s = _.find(stats.file.share.to, { root: riakfs2.options.root })
+            s.alias.should.be.eql('fs1-dir1')
+        })
+    })
+
     it('#stat', function() {
         return riakfs2.stat('/Shared/fs1-dir1/file1').then(function(stats) {
             stats.should.be.an('object')
