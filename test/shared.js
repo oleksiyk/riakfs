@@ -162,6 +162,7 @@ describe('#shared directory', function() {
             stats.should.be.an('object')
             stats.isFile().should.eql(true)
             stats.size.should.be.eql(5)
+            stats.mode.should.be.eql(33060) // 0100000 | 0444
         })
     })
 
