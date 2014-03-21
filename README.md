@@ -159,7 +159,7 @@ or readonly:
 fs1.share('/some/dir', fs2.options.root, 'alias', true)
 ```
 
-This will create a directory names `/Shared/alias` in fs1.
+This will create a directory named `/Shared/alias` in fs1.
 
 You can read sharing info by `stat`ing on shared directories from both filesystems:
 
