@@ -42,7 +42,9 @@ global.connect = function(options) {
         root: 'TeSt-' + uid2(8),
         riak: {
             host: '127.0.0.1',
-            port: 8087
+            port: 8087,
+            minPool: 1,
+            maxPool: 3
         },
         events: false,
         sharedFs: false
