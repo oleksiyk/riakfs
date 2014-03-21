@@ -432,36 +432,36 @@ describe('#shared directory', function() {
     })
 
     it('#rename - move between filesystems', function() {
-        this.timeout(3000)
-        return setup()
+        return riakfs1.makeTree('/dir4/dir2/dir3')
         .then(function() {
-            return riakfs1.mkdir('/dir1/dir2/dir3')
+            return Promise.all([
+                riakfs1.writeFile('/dir4/file1', 'hello'),
+                riakfs1.writeFile('/dir4/dir2/file2', 'hello'),
+                riakfs1.writeFile('/dir4/dir2/dir3/file3', 'hello!')
+            ])
         })
         .then(function() {
-            return riakfs1.writeFile('/dir1/dir2/dir3/file', 'hello!')
+            return riakfs1.share('/dir4', riakfs2.options.root, 'fs1-dir4')
         })
         .then(function() {
-            return riakfs1.share('/dir1', riakfs2.options.root, 'fs1-dir1')
+            return riakfs2.rename('/Shared/fs1-dir4/dir2', '/new')
         })
         .then(function() {
-            return riakfs2.rename('/Shared/fs1-dir1/dir2', '/new')
-        })
-        .then(function() {
-            return riakfs2.stat('/new/file1').then(function(stats) {
+            return riakfs2.stat('/new/file2').then(function(stats) {
                 stats.should.be.an('object')
                 stats.isFile().should.eql(true)
                 stats.size.should.be.eql(5)
             })
         })
         .then(function() {
-            return riakfs2.stat('/new/dir3/file').then(function(stats) {
+            return riakfs2.stat('/new/dir3/file3').then(function(stats) {
                 stats.should.be.an('object')
                 stats.isFile().should.eql(true)
                 stats.size.should.be.eql(6)
             })
         })
         .then(function() {
-            return riakfs1.readdir('/dir1').then(function(list) {
+            return riakfs1.readdir('/dir4').then(function(list) {
                 list.should.contain('file1').and.not.contain('dir2')
             })
         })
