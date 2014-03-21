@@ -22,7 +22,7 @@ describe('#shared directory', function() {
         }
     }
 
-    var setup = function() {
+    before(function() {
         return Promise.all([
             connect({sharedFs: sharedFs}),
             connect({sharedFs: sharedFs}),
@@ -45,9 +45,7 @@ describe('#shared directory', function() {
                 return riakfs1.writeFile('/dir1/dir2/file1', 'hello')
             })
         })
-    }
-
-    before(setup)
+    })
 
     it('should fail for missing directory', function() {
         return riakfs1.share('/abracadabra', riakfs2.options.root, 'fs1-dir1').should.be.rejected.and.eventually.have.property('code', 'ENOENT')
