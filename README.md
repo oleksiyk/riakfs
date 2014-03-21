@@ -204,6 +204,19 @@ from fs2:
 ```javascript
 fs2.unshare('/Shared/alias')
 ```
+#### Initializing filesystems for shared firs
+
+Your application should provide a function that should return a promise for RiakFS instance for specified root, example:
+
+```javascript
+require('riakfs').create({ root: someId, events: true,
+    shared: {
+        fs: function(_root){
+            // return riakfs instance for specified `root` = _root
+        }
+    }
+})
+```
 
 ## Application
 
