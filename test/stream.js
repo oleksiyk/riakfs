@@ -6,7 +6,7 @@ var Promise = require('bluebird');
 var path    = require('path')
 var fs      = require('fs')
 
-describe.only('Stream', function() {
+describe('Stream', function() {
 
     var riakfs;
 
