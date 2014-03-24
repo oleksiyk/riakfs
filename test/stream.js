@@ -6,7 +6,7 @@ var Promise = require('bluebird');
 var path    = require('path')
 var fs      = require('fs')
 
-describe('Stream', function() {
+describe.only('Stream', function() {
 
     var riakfs;
 
@@ -17,42 +17,29 @@ describe('Stream', function() {
     })
 
     function copyFileFromFilesystem(from, to){
-        var deferred = Promise.defer();
-        var readStream = fs.createReadStream(from)
-        var writeStream = riakfs.createWriteStream(to)
-
-        readStream.on('error', function(err) {
-            deferred.reject(err)
+        return new Promise(function(resolve, reject) {
+            var readStream = fs.createReadStream(from)
+            var writeStream = riakfs.createWriteStream(to)
+            readStream.on('error', reject)
+            writeStream.on('error', reject)
+            writeStream.on('close', resolve)
+            readStream.pipe(writeStream);
         })
-
-        writeStream.on('error', function(err) {
-            deferred.reject(err)
-        })
-
-        writeStream.on('close', function() {
-            deferred.resolve()
-        })
-
-        readStream.pipe(writeStream);
-
-        return deferred.promise
     }
 
     function md5FromStream(filename) {
-        var deferred = Promise.defer();
-        var shasum = require('crypto').createHash('md5');
-        var s = riakfs.createReadStream(filename);
-        s.on('data', function(d) {
-            shasum.update(d);
-        });
-        s.on('end', function() {
-            var d = shasum.digest('hex');
-            deferred.resolve(d)
-        });
-        s.on('error', function(err) {
-            deferred.reject(err)
+        return new Promise(function(resolve, reject) {
+            var shasum = require('crypto').createHash('md5');
+            var s = riakfs.createReadStream(filename);
+            s.on('data', function(d) {
+                shasum.update(d);
+            });
+            s.on('end', function() {
+                var d = shasum.digest('hex');
+                resolve(d)
+            });
+            s.on('error', reject)
         })
-        return deferred.promise;
     }
 
     testfiles.forEach(function(f) {
