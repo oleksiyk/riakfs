@@ -144,8 +144,11 @@ describe('Files', function() {
                 return riakfs.write(fd, 'de', 0, 2, 3)
             })
             .then(function() {
+                return riakfs.write(fd, ' hello', 0, 6, 5)
+            })
+            .then(function() {
                 return riakfs.close(fd).then(function() {
-                    fd.file.should.have.property('size', 5)
+                    fd.file.should.have.property('size', 11)
                     fd.file.should.have.property('version', 1)
                     fd.file.should.have.property('contentType', 'text/plain')
 
@@ -153,7 +156,7 @@ describe('Files', function() {
                         var buffer = new Buffer(fd.file.size)
                         return riakfs.read(fd, buffer, 0, fd.file.size).then(function(length) {
                             length.should.be.eql(fd.file.size)
-                            buffer.slice(0,length).toString().should.be.eql('abcde')
+                            buffer.slice(0,length).toString().should.be.eql('abcde hello')
                         })
                     })
                 })
