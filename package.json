@@ -13,7 +13,7 @@
         "riakpbc-promised": "git://github.com/oleksiyk/riakpbc-promised",
         "bluebird": "~=1.0.*",
         "lodash": "~=2.4.*",
-        "mmmagic": "~=0.3.6",
+        "mmmagic": "=0.3.5",
         "xregexp": "~=2.0.0",
         "uid2": "~=0.0.3"
     },
