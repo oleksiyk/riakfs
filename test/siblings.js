@@ -55,7 +55,7 @@ describe('Siblings', function() {
     })
 
     testfiles.forEach(function(f) {
-        it('file + file siblings without proper content', function() {
+        it.skip('file + file siblings without proper content', function() {
             var id;
             return Promise.promisify(fs.readFile)(f.path).then(function(data) {
                 return riakfs.writeFile('/' + path.basename(f.path), data)
@@ -120,7 +120,7 @@ describe('Siblings', function() {
         })
     })
 
-    it('file + empty directory sibling', function() {
+    it.skip('file + empty directory sibling', function() {
         var id, vclock;
         return riakfs.open('/testDirOrFile', 'w').then(function(fd) {
             id = fd.file.id;
