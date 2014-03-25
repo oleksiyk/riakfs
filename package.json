@@ -6,7 +6,7 @@
         "name": "Oleksiy Krivoshey",
         "email": "oleksiyk@gmail.com"
     },
-    "version": "1.0.4",
+    "version": "1.0.6",
     "main": "./lib/index.js",
     "keywords": ["riak", "fs"],
     "dependencies": {
