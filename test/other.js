@@ -34,11 +34,12 @@ describe('Other API', function() {
     })
 
     describe('#futimes', function() {
-        it('should update mtime for file', function() {
+        it('should update atime and mtime for file', function() {
             return riakfs.open('/futimes', 'w').then(function(fd) {
-                return riakfs.futimes(fd, null, new Date(0)).then(function() {
+                return riakfs.futimes(fd, new Date(0), new Date(1)).then(function() {
                     return riakfs.stat('/futimes').then(function(stat) {
-                        stat.mtime.should.be.eql(new Date(0))
+                        stat.atime.should.be.eql(new Date(0))
+                        stat.mtime.should.be.eql(new Date(1))
                     })
                 })
             })
@@ -46,12 +47,22 @@ describe('Other API', function() {
     })
 
     describe('#utimes', function() {
-        it('should update mtime for file', function() {
+        it('should update atime and mtime for file', function() {
             return riakfs.open('/utimes', 'w').then(function() {
-                return riakfs.utimes('/utimes', null, new Date(10)).then(function() {
+                return riakfs.utimes('/utimes', new Date(10), new Date(11)).then(function() {
                     return riakfs.stat('/utimes').then(function(stat) {
-                        stat.mtime.should.be.eql(new Date(10))
+                        stat.atime.should.be.eql(new Date(10))
+                        stat.mtime.should.be.eql(new Date(11))
                     })
+                })
+            })
+        })
+
+        it('should only update atime', function() {
+            return riakfs.utimes('/utimes', new Date(20), null).then(function() {
+                return riakfs.stat('/utimes').then(function(stat) {
+                    stat.atime.should.be.eql(new Date(20))
+                    stat.mtime.should.be.eql(new Date(11))
                 })
             })
         })
