@@ -220,6 +220,16 @@ require('riakfs').create({ root: someId, events: true,
 })
 ```
 
+### Trash
+
+RiakFs allows to move files to /.Trash upon removal. Just enable trash support when initialising riakfs:
+
+```javascript
+require('riakfs').create({ root: someId, trash: true })
+```
+
+Files are not removed automatically by RiakFs from /.Trash so your application should take care of this. You can use `mtime` to detect when file was removed.
+
 ## Application
 
 The idea is that this module (connected `riakfs` instance) can be used as a drop-in replacement for node `fs` module.
