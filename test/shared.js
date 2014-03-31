@@ -67,6 +67,10 @@ describe('#shared directory', function() {
         return riakfs1.share('/Shared', riakfs2.options.root, 'fs1-dir1').should.be.rejected.and.eventually.have.property('code', 'EINVAL')
     })
 
+    it('should fail for /.Trash', function() {
+        return riakfs1.share('/.Trash', riakfs2.options.root, 'fs1-dir1').should.be.rejected.and.eventually.have.property('code', 'EINVAL')
+    })
+
     it('should not allow sharing when target path is a file', function() {
         return riakfs2.mkdir('/Shared').then(function() {
             return riakfs2.writeFile('/Shared/file1', 'hello').then(function() {
@@ -102,7 +106,12 @@ describe('#shared directory', function() {
     })
 
     it('should not allow re-sharing', function() {
-        return riakfs2.share('/Shared/fs1-dir1', riakfs3.options.root, 'fs2-dir1').should.be.rejected.and.eventually.have.property('code', 'EACCES')
+        return riakfs2.share('/Shared/fs1-dir1', riakfs3.options.root, 'fs2-dir1').should.be.rejected.and.eventually.have.property('code', 'EINVAL')
+    })
+
+    it('should not allow deep re-sharing', function() {
+        return riakfs2.share('/Shared/fs1-dir1/dir2',
+            riakfs3.options.root, 'fs2-dir1-dir2').should.be.rejected.and.eventually.have.property('code', 'EINVAL')
     })
 
     it('should not allow suplicate sharing', function() {
