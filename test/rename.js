@@ -131,6 +131,28 @@ describe('#rename', function() {
         })
     })
 
+    it('should update file mtime', function() {
+        var cb = sinon.spy(function() {})
+        return createTestHierachy('/t8.1').then(function() {
+            return riakfs.stat('/t8.1/dir1/file1')
+            .then(function(stats1) {
+                return Promise.delay(100).then(function () {
+                    return riakfs.rename('/t8.1/dir1/file1', '/t8.1/dir1/file3', cb)
+                        .then(function() {
+                            cb.should.have.been.calledWith(null)
+                            return riakfs.stat('/t8.1/dir1/file3').then(function(stats2) {
+                                stats2.should.be.an('object')
+                                stats2.file.id.should.be.eql(stats1.file.id)
+                                stats2.mtime.should.not.be.eql(stats1.mtime)
+                                var d = stats2.mtime - stats1.mtime
+                                d.should.be.closeTo(100, 30)
+                            })
+                        })
+                })
+            })
+        })
+    })
+
     it('should move single file to new dir', function() {
         var cb = sinon.spy(function() {})
         return createTestHierachy('/t81').then(function() {
