@@ -16,7 +16,7 @@ The following methods are implemented:
 *  `unlink`
 *  `stat`
 *  `fstat`
-*  `utime`
+*  `utimes`
 *  `futimes`
 *  `appendFile`
 *  `exists`
@@ -27,8 +27,9 @@ The following methods are implemented:
 It also adds some convenient methods like:
 
 *  `makeTree` - recursively create directory tree
-*  `copy` - copy files (within riakfs)
+*  `copy` - copy files (within same riakfs)
 *  `updateMeta` and `setMeta` - manipulate custom metadata saved with files
+*  `share` - share directory with other riakfs
 
 All methods will return a [promise](https://github.com/petkaantonov/bluebird) as well as call a usual callback
 
@@ -222,7 +223,6 @@ require('riakfs').create({ root: someId, events: true,
 ## Application
 
 The idea is that this module (connected `riakfs` instance) can be used as a drop-in replacement for node `fs` module.
-For example it can be used with [nodeftpd](https://github.com/sstur/nodeftpd)
 
 ## Status
 
@@ -230,8 +230,8 @@ Not tested in production yet. Under development. Pull requests are welcomed. Tes
 
 ## Riak settings
 I suggest to increase erlang network buffer size (See: http://www.erlang.org/doc/man/erl.html#%2bzdbbl)
-In version 1.4.x this parameter is located in vm.args file. The value is in kilobytes (so 32768 - 32MB).
-In version 2.0 the parameter is called erlang.distribution_buffer_size, should be put in riak.conf and the value is in bytes (33554432 = 32MB).
+*  In version 1.4.x this parameter is located in vm.args file. The value is in kilobytes (so 32768 - 32MB).
+*  In version 2.0 the parameter is called erlang.distribution_buffer_size, should be put in riak.conf and the value is in bytes (33554432 = 32MB).
 
 ## Authors
 
