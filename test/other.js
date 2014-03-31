@@ -1,6 +1,6 @@
 "use strict";
 
-/* global describe, it, sinon, connect, before */
+/* global describe, it, connect, before */
 
 // var Promise = require('bluebird');
 // var fs      = require('fs');
@@ -18,11 +18,9 @@ describe('Other API', function() {
 
     describe('#exists', function() {
         it('should return true for existing file', function() {
-            var cb = sinon.spy(function() {})
             return riakfs.mkdir('/exists').then(function() {
-                return riakfs.exists('/exists', cb)
+                return riakfs.exists('/exists')
                     .then(function(exists) {
-                        cb.should.have.been.calledWith(null, true)
                         return exists.should.be.true
                     })
             })

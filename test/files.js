@@ -1,6 +1,6 @@
 "use strict";
 
-/* global before, describe, it, connect, sinon, testfiles */
+/* global before, describe, it, connect, testfiles */
 
 var Promise = require('bluebird');
 var fs      = require('fs');
@@ -24,21 +24,17 @@ describe('Files', function() {
         })
 
         it('should fail for wrong flags - EINVAL', function() {
-            var cb = sinon.spy(function() {})
             return Promise.all([
-                riakfs.open('/testfile', 'as', cb).should.be.rejected.and.eventually.have.property('code', 'EINVAL'),
+                riakfs.open('/testfile', 'as').should.be.rejected.and.eventually.have.property('code', 'EINVAL'),
                 riakfs.open('/testfile').should.be.rejected.and.eventually.have.property('code', 'EINVAL'),
                 riakfs.open('/testfile', '').should.be.rejected.and.eventually.have.property('code', 'EINVAL'),
                 riakfs.open('/testfile', 1).should.be.rejected.and.eventually.have.property('code', 'EINVAL'),
-            ]).then(function() {
-                cb.getCall(0).args[0].should.be.instanceOf(Error).and.have.property('code', 'EINVAL')
-            })
+            ])
         });
 
         ['w', 'w+', 'a', 'a+', 'wx', 'wx+', 'ax', 'ax+'].forEach(function(flag) {
             it('should create new file wih flags=' + flag, function() {
-                var cb = sinon.spy(function() {})
-                return riakfs.open('/testnewfile_' + flag, flag, cb)
+                return riakfs.open('/testnewfile_' + flag, flag)
                     .then(function(fd) {
                         fd.should.be.an('object')
                         fd.should.have.property('flags', flag)
@@ -48,56 +44,34 @@ describe('Files', function() {
                         fd.file.should.have.property('ctime').that.is.closeTo(new Date(), 500)
                         fd.file.should.have.property('size')
                         fd.file.should.have.property('version', -1)
-
-                        cb.should.have.been.calledWith(null, fd)
                     })
             })
         });
 
         ['wx', 'wx+', 'ax', 'ax+'].forEach(function(flag) {
             it('should fail for existing file with flags=' + flag + ' - EEXIST', function() {
-                var cb = sinon.spy(function() {})
-                return riakfs.open('/testnewfile_' + flag, flag, cb).should.be.rejected.and.eventually.have.property('code', 'EEXIST')
-                    .then(function() {
-                        cb.getCall(0).args[0].should.be.instanceOf(Error).and.have.property('code', 'EEXIST')
-                    })
+                return riakfs.open('/testnewfile_' + flag, flag).should.be.rejected.and.eventually.have.property('code', 'EEXIST')
             })
         });
 
         ['r', 'r+'].forEach(function(flag) {
             it('should fail for missing file (or directory) flags=' + flag + ' - ENOENT', function() {
-                var cb = sinon.spy(function() {})
-                return riakfs.open('/abracadabra', flag, cb).should.be.rejected.and.eventually.have.property('code', 'ENOENT')
-                    .then(function() {
-                        cb.getCall(0).args[0].should.be.instanceOf(Error).and.have.property('code', 'ENOENT')
-                    })
+                return riakfs.open('/abracadabra', flag).should.be.rejected.and.eventually.have.property('code', 'ENOENT')
             })
         });
 
         ['r', 'r+', 'w', 'w+', 'wx', 'wx+', 'a', 'a+', 'ax', 'ax+'].forEach(function(flag) {
             it('should fail for missing path for file (or directory) flags=' + flag + ' - ENOENT', function() {
-                var cb = sinon.spy(function() {})
-                return riakfs.open('/abracadabra/abracadabra', flag, cb).should.be.rejected.and.eventually.have.property('code', 'ENOENT')
-                    .then(function() {
-                        cb.getCall(0).args[0].should.be.instanceOf(Error).and.have.property('code', 'ENOENT')
-                    })
+                return riakfs.open('/abracadabra/abracadabra', flag).should.be.rejected.and.eventually.have.property('code', 'ENOENT')
             })
         });
 
         ['r', 'r+', 'w', 'w+', 'wx', 'wx+', 'a', 'a+', 'ax', 'ax+'].forEach(function(flag) {
             it('should fail for existing directory with flags=' + flag + ' - EISDIR', function() {
-                var cb = sinon.spy(function() {})
-                return riakfs.open('/testDirectory', flag, cb).should.be.rejected.and.eventually.have.property('code', 'EISDIR')
-                    .then(function() {
-                        cb.getCall(0).args[0].should.be.instanceOf(Error).and.have.property('code', 'EISDIR')
-                    })
+                return riakfs.open('/testDirectory', flag).should.be.rejected.and.eventually.have.property('code', 'EISDIR')
             })
             it('should fail when part of path prefix is not a directory, flags=' + flag + ' - ENOTDIR', function() {
-                var cb = sinon.spy(function() {})
-                return riakfs.open('/testnewfile_w/anotherfile', flag, cb).should.be.rejected.and.eventually.have.property('code', 'ENOTDIR')
-                    .then(function() {
-                        cb.getCall(0).args[0].should.be.instanceOf(Error).and.have.property('code', 'ENOTDIR')
-                    })
+                return riakfs.open('/testnewfile_w/anotherfile', flag).should.be.rejected.and.eventually.have.property('code', 'ENOTDIR')
             })
         })
     })
@@ -245,64 +219,6 @@ describe('Files', function() {
                 })
             })
         })
-
-        it('should call callback on success', function() {
-
-            var cb = sinon.spy(function() {})
-
-            return riakfs.open('/testWriteFile', 'w').then(function(fd) {
-                return riakfs.write(fd, 'test', 0, 4, null, cb).then(function() {
-                    return riakfs.close(fd).then(function() {
-                        cb.should.have.been.calledWith(null, 4)
-                    })
-                })
-            })
-        })
-
-        it('should call callback with error on error', function() {
-
-            var cb = sinon.spy(function() {})
-            var data = 'test'
-
-            return riakfs.write(null, data, 0, 4, null, cb).should.be.rejected.and.eventually.have.property('code', 'EBADF')
-                .then(function() {
-                    cb.getCall(0).args[0].should.be.instanceOf(Error).and.have.property('code', 'EBADF')
-                })
-        })
-    })
-
-    describe('#close', function() {
-        it('should call callback on success without write', function() {
-
-            var cb = sinon.spy(function() {})
-
-            return riakfs.open('/testCloseFile', 'w').then(function(fd) {
-                return riakfs.close(fd, cb).then(function() {
-                    cb.should.have.been.calledWith(null)
-                })
-            })
-        })
-
-        it('should call callback on success with write', function() {
-
-            var cb = sinon.spy(function() {})
-
-            return riakfs.open('/testWriteFile', 'w').then(function(fd) {
-                return riakfs.write(fd, 'test', 0, 4, null).then(function() {
-                    return riakfs.close(fd, cb).then(function() {
-                        cb.should.have.been.calledWith(null)
-                    })
-                })
-            })
-        })
-
-        it('should call callback with error on error', function() {
-            var cb = sinon.spy(function() {})
-            return riakfs.close(null, cb).should.be.rejected.and.eventually.have.property('code', 'EBADF')
-                .then(function() {
-                    cb.getCall(0).args[0].should.be.instanceOf(Error).and.have.property('code', 'EBADF')
-                })
-        })
     })
 
     describe('#read', function() {
@@ -385,12 +301,10 @@ describe('Files', function() {
 
         testfiles.forEach(function(f) {
             it('should create and write file', function() {
-                var cb = sinon.spy(function() {})
                 return Promise.promisify(fs.readFile)(f.path).then(function(data) {
-                    return riakfs.writeFile('/' + path.basename(f.path), data, cb)
+                    return riakfs.writeFile('/' + path.basename(f.path), data)
                 })
                 .then(function() {
-                    cb.should.have.been.calledWith(null)
                     return riakfs.stat('/' + path.basename(f.path)).then(function(file) {
                         file.size.should.be.eql(f.size)
                         file.contentType.should.be.eql(f.contentType)
@@ -404,8 +318,7 @@ describe('Files', function() {
 
         testfiles.forEach(function(f) {
             it('should read file into buffer', function() {
-                var cb = sinon.spy(function() {})
-                return riakfs.readFile('/' + path.basename(f.path), cb).then(function(data) {
+                return riakfs.readFile('/' + path.basename(f.path)).then(function(data) {
                     data.length.should.be.eql(f.size)
                     require('crypto').createHash('md5').update(data).digest('hex').should.be.eql(f.md5)
                 })
@@ -427,32 +340,19 @@ describe('Files', function() {
         })
 
         it('should fail for not existing path', function() {
-            var cb = sinon.spy(function() {})
-            return riakfs.unlink('/abracadabra', cb).should.be.rejected.and.eventually.have.property('code', 'ENOENT')
-                .then(function() {
-                    cb.getCall(0).args[0].should.be.instanceOf(Error).and.have.property('code', 'ENOENT')
-                })
+            return riakfs.unlink('/abracadabra').should.be.rejected.and.eventually.have.property('code', 'ENOENT')
         })
 
         it('should fail for directory', function() {
-            var cb = sinon.spy(function() {})
-
-            return riakfs.unlink('/unlinkDir', cb).should.be.rejected.and.eventually.have.property('code', 'EISDIR')
-                .then(function() {
-                    cb.getCall(0).args[0].should.be.instanceOf(Error).and.have.property('code', 'EISDIR')
-            })
+            return riakfs.unlink('/unlinkDir').should.be.rejected.and.eventually.have.property('code', 'EISDIR')
         })
 
         testfiles.forEach(function(f) {
             it('should remove file', function() {
-                var cb = sinon.spy(function() {})
                 var filename = '/unlink_' + path.basename(f.path)
-
                 return riakfs.stat(filename).then(function(file) {
-                    return riakfs.unlink(filename, cb)
+                    return riakfs.unlink(filename)
                         .then(function() {
-                            cb.should.have.been.calledWith(null)
-
                             return Promise.all([
                                 riakfs.stat(filename).should.be.rejected.and.eventually.have.property('code', 'ENOENT'),
 
@@ -475,7 +375,6 @@ describe('Files', function() {
 
         testfiles.forEach(function(f) {
             it('should copy file', function() {
-                var cb = sinon.spy(function() {})
                 var sourceFilename = '/copy1_' + path.basename(f.path)
                 var targetFilename = '/copy2_' + path.basename(f.path)
 
@@ -483,10 +382,7 @@ describe('Files', function() {
                     return riakfs.writeFile(sourceFilename, data)
                 })
                 .then(function() {
-                    return riakfs.copy(sourceFilename, targetFilename, cb)
-                })
-                .then(function() {
-                    cb.should.have.been.calledWith(null)
+                    return riakfs.copy(sourceFilename, targetFilename)
                 })
                 .then(function() {
                     return riakfs.readFile(targetFilename).then(function(data) {
@@ -498,11 +394,7 @@ describe('Files', function() {
         })
 
         it('should fail for missing source file', function() {
-            var cb = sinon.spy(function() {})
-            return riakfs.copy('/abracadabra1', '/abracadbra2', cb).should.be.rejected.and.eventually.have.property('code', 'ENOENT')
-                .then(function() {
-                    cb.getCall(0).args[0].should.be.instanceOf(Error).and.have.property('code', 'ENOENT')
-                })
+            return riakfs.copy('/abracadabra1', '/abracadbra2').should.be.rejected.and.eventually.have.property('code', 'ENOENT')
         })
     })
 
