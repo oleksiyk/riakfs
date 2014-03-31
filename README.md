@@ -29,7 +29,7 @@ It also adds some convenient methods like:
 *  `makeTree` - recursively create directory tree
 *  `copy` - copy files (within same riakfs)
 *  `updateMeta` and `setMeta` - manipulate custom metadata saved with files
-*  `share` - share directory with other riakfs
+*  `share` - share directory with another riakfs
 
 All methods will return a [promise](https://github.com/petkaantonov/bluebird) as well as call a usual callback
 
