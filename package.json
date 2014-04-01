@@ -6,7 +6,7 @@
         "name": "Oleksiy Krivoshey",
         "email": "oleksiyk@gmail.com"
     },
-    "version": "1.1.0",
+    "version": "1.1.1",
     "main": "./lib/index.js",
     "keywords": ["riak", "fs"],
     "dependencies": {
@@ -14,7 +14,6 @@
         "bluebird": "~=1.2.x",
         "lodash": "~=2.4.*",
         "mmmagic": "=0.3.7",
-        "xregexp": "~=2.0.0",
         "uid2": "~=0.0.3"
     },
     "devDependencies": {
