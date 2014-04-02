@@ -112,9 +112,7 @@ describe('#rename', function() {
                             return riakfs.stat('/t8.1/dir1/file3').then(function(stats2) {
                                 stats2.should.be.an('object')
                                 stats2.file.id.should.be.eql(stats1.file.id)
-                                stats2.mtime.should.not.be.eql(stats1.mtime)
-                                var d = stats2.mtime - stats1.mtime
-                                d.should.be.closeTo(100, 30)
+                                stats2.mtime.should.be.above(stats1.mtime)
                             })
                         })
                 })

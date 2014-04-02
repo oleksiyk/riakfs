@@ -66,7 +66,7 @@ describe('Files', function() {
             })
         });
 
-        ['r', 'r+', 'w', 'w+', 'wx', 'wx+', 'a', 'a+', 'ax', 'ax+'].forEach(function(flag) {
+        ['w', 'w+', 'wx', 'wx+', 'a', 'a+', 'ax', 'ax+'].forEach(function(flag) {
             it('should fail for existing directory with flags=' + flag + ' - EISDIR', function() {
                 return riakfs.open('/testDirectory', flag).should.be.rejected.and.eventually.have.property('code', 'EISDIR')
             })
