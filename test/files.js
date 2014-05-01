@@ -361,7 +361,8 @@ describe('Files', function() {
                                     return riakfs.riak.get({
                                         bucket: riakfs.chunksBucket,
                                         key: key,
-                                        head: true
+                                        head: true,
+                                        type: riakfs.chunksType
                                     }).should.eventually.be.empty;
                                 })
                             ])

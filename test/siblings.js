@@ -24,6 +24,7 @@ describe('Siblings', function() {
                     return riakfs.riak.get({
                         bucket: riakfs.filesBucket,
                         key: '/test',
+                        type: riakfs.options.metaType
                     }).then(function(reply) {
                         reply.content.should.be.an('array').and.have.length(1)
                     })
@@ -48,6 +49,7 @@ describe('Siblings', function() {
             return riakfs.riak.get({
                 bucket: riakfs.filesBucket,
                 key: '/testFile',
+                type: riakfs.options.metaType
             }).then(function(reply) {
                 reply.content.should.be.an('array').and.have.length(1)
             })
@@ -79,7 +81,8 @@ describe('Siblings', function() {
                                 length: len
                             }),
                             content_type: 'application/json'
-                        }
+                        },
+                        type: riakfs.options.metaType
                     })
                 })
             })
@@ -101,7 +104,8 @@ describe('Siblings', function() {
                 return riakfs.riak.get({
                     bucket: riakfs.filesBucket,
                     key: '/testDeletedFile',
-                    head: true
+                    head: true,
+                    type: riakfs.options.metaType
                 }).then(function(_reply) {
                     vclock = _reply.vclock
                     return riakfs.close(fd)
@@ -112,7 +116,8 @@ describe('Siblings', function() {
             return riakfs.riak.del({
                 bucket: riakfs.filesBucket,
                 key: '/testDeletedFile',
-                vclock: vclock
+                vclock: vclock,
+                type: riakfs.options.metaType
             })
         })
         .then(function() {
@@ -128,7 +133,8 @@ describe('Siblings', function() {
                 return riakfs.riak.get({
                     bucket: riakfs.filesBucket,
                     key: '/testDirOrFile',
-                    head: true
+                    head: true,
+                    type: riakfs.options.metaType
                 }).then(function(_reply) {
                     vclock = _reply.vclock
                     return riakfs.close(fd)
@@ -147,7 +153,8 @@ describe('Siblings', function() {
                         isDirectory: true
                     }),
                     content_type: 'application/json'
-                }
+                },
+                type: riakfs.options.metaType
             })
         })
         .then(function() {

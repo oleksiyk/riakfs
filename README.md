@@ -236,7 +236,7 @@ The idea is that this module (connected `riakfs` instance) can be used as a drop
 
 ## Status
 
-Not tested in production yet. Under development. Pull requests are welcomed. Tested with Riak 1.4 and Riak 2.0pre.
+Not tested in production yet. Under development. Pull requests are welcomed.
 
 ## Riak settings
 I suggest to increase erlang network buffer size (See: http://www.erlang.org/doc/man/erl.html#%2bzdbbl)

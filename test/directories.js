@@ -20,7 +20,8 @@ describe('Directories', function() {
                 .then(function() {
                     return riakfs.riak.get({
                         bucket: riakfs.filesBucket,
-                        key: '/test'
+                        key: '/test',
+                        type: riakfs.options.metaType
                     })
                 })
                 .then(function(reply) {
@@ -44,7 +45,8 @@ describe('Directories', function() {
                 .then(function() {
                     return riakfs.riak.get({
                         bucket: riakfs.filesBucket,
-                        key: '/test'
+                        key: '/test',
+                        type: riakfs.options.metaType
                     })
                 })
                 .then(function(reply) {
