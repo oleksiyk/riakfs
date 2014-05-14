@@ -407,6 +407,18 @@ describe('#shared directory', function() {
         })
     })
 
+    it('#rename - should handle source dir renaming for dir inside /Shared (back)', function() {
+        return riakfs1.rename('/Shared-dir-renamed', '/Shared/dir')
+        .then(function() {
+            return Promise.all([
+                riakfs1.stat('/Shared/dir'),
+                riakfs2.stat('/Shared/fs1-shared-dir')
+            ]).spread(function (stats1, stats2) {
+                stats1.should.be.deep.eql(stats2)
+            })
+        })
+    })
+
     it('#rename - should handle rename operation inside destination shares', function() {
         return riakfs2.mkdir('/Shared/fs1-dir1-dir2/dir3')
         .then(function() {
