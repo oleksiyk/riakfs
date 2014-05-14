@@ -106,15 +106,15 @@ describe('#shared directory', function() {
     })
 
     it('should not allow re-sharing', function() {
-        return riakfs2.share('/Shared/fs1-dir1', riakfs3.options.root, 'fs2-dir1').should.be.rejected.and.eventually.have.property('code', 'EINVAL')
+        return riakfs2.share('/Shared/fs1-dir1', riakfs3.options.root, 'fs2-dir1').should.be.rejected.and.eventually.have.property('code', 'ESHARED')
     })
 
     it('should not allow deep re-sharing', function() {
         return riakfs2.share('/Shared/fs1-dir1/dir2',
-            riakfs3.options.root, 'fs2-dir1-dir2').should.be.rejected.and.eventually.have.property('code', 'EINVAL')
+            riakfs3.options.root, 'fs2-dir1-dir2').should.be.rejected.and.eventually.have.property('code', 'ESHARED')
     })
 
-    it('should not allow suplicate sharing', function() {
+    it('should not allow duplicate sharing', function() {
         return riakfs1.share('/dir1', riakfs2.options.root, 'fs1-dir1-duplicate').should.be.rejected.and.eventually.have.property('code', 'ESHARED')
     })
 
