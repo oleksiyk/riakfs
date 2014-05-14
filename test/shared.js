@@ -105,6 +105,19 @@ describe('#shared directory', function() {
         })
     })
 
+    it('should share directory from /Shared', function() {
+        return riakfs1.makeTree('/Shared/dir').then(function () {
+            return riakfs1.share('/Shared/dir', riakfs2.options.root, 'fs1-shared-dir').then(function() {
+                return Promise.all([
+                    riakfs1.stat('/Shared/dir'),
+                    riakfs2.stat('/Shared/fs1-shared-dir')
+                ]).spread(function (stats1, stats2) {
+                    stats1.should.be.deep.eql(stats2)
+                })
+            })
+        })
+    })
+
     it('should not allow re-sharing', function() {
         return riakfs2.share('/Shared/fs1-dir1', riakfs3.options.root, 'fs2-dir1').should.be.rejected.and.eventually.have.property('code', 'ESHARED')
     })
@@ -382,6 +395,18 @@ describe('#shared directory', function() {
         })
     })
 
+    it('#rename - should handle source dir renaming for dir inside /Shared', function() {
+        return riakfs1.rename('/Shared/dir', '/Shared-dir-renamed')
+        .then(function() {
+            return Promise.all([
+                riakfs1.stat('/Shared-dir-renamed'),
+                riakfs2.stat('/Shared/fs1-shared-dir')
+            ]).spread(function (stats1, stats2) {
+                stats1.should.be.deep.eql(stats2)
+            })
+        })
+    })
+
     it('#rename - should handle rename operation inside destination shares', function() {
         return riakfs2.mkdir('/Shared/fs1-dir1-dir2/dir3')
         .then(function() {
@@ -434,7 +459,7 @@ describe('#shared directory', function() {
         return riakfs2.rename('/Shared', '/Shared-renamed').should.be.rejected.and.eventually.have.property('code', 'EINVAL')
     })
 
-    it('#rename - rename destination share', function() {
+    it('#rename - rename destination share (change alias)', function() {
         return riakfs2.rename('/Shared/fs1-dir1', '/Shared/fs1-dir1-renamed')
         .then(function() {
             return riakfs2.readdir('/Shared/fs1-dir1-renamed').then(function(list) {
@@ -449,7 +474,7 @@ describe('#shared directory', function() {
         })
     })
 
-    it('#rename - move between filesystems', function() {
+    it('#rename - move shared sub dirs between filesystems', function() {
         return riakfs1.makeTree('/dir4/dir2/dir3')
         .then(function() {
             return Promise.all([
