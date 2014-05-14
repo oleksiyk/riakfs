@@ -1,6 +1,7 @@
 "use strict";
 
 /* global describe, it, connect, before */
+/* jshint maxstatements: 60 */
 
 var Promise = require('bluebird');
 var _       = require('lodash');
