@@ -46,8 +46,7 @@ global.connect = function(options) {
             minPool: 1,
             maxPool: 3
         },
-        events: false,
-        sharedFs: false
+        events: false
     });
 
     return require(global.libPath).create(options)

@@ -311,6 +311,15 @@ describe('Files', function() {
                     })
                 })
             })
+
+            it('should overwrite file', function() {
+                return Promise.promisify(fs.readFile)(f.path).then(function(data) {
+                    return riakfs.writeFile('/' + path.basename(f.path), 'hello')
+                    .then(function () {
+                        return riakfs.writeFile('/' + path.basename(f.path), data)
+                    })
+                })
+            })
         })
     })
 
