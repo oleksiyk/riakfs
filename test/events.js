@@ -17,36 +17,21 @@ describe('#events', function() {
     describe('new', function() {
 
         it('file', function(done) {
-            riakfs.once('new', function(filename, info) {
-                try {
+            riakfs.once('new', function(filename, stats) {
+                riakfs.stat(filename).then(function (_stats) {
                     filename.should.be.eql('/test');
-                    info.should.be.an('object');
-                    info.should.have.property('mtime');
-                    info.should.have.property('ctime');
-                    info.should.have.property('size', 5);
-                    info.should.have.property('contentType');
-                    info.should.have.property('version');
-                    info.should.have.property('id');
-                    done();
-                } catch (err){
-                    done(err);
-                }
+                    _stats.should.be.eql(stats);
+                }).nodeify(done);
             });
             riakfs.writeFile('/test', 'hello');
         });
 
         it('directory', function(done) {
-            riakfs.once('new', function(filename, info) {
-                try {
+            riakfs.once('new', function(filename, stats) {
+                riakfs.stat(filename).then(function (_stats) {
                     filename.should.be.eql('/testDir');
-                    info.should.be.an('object');
-                    info.should.have.property('mtime');
-                    info.should.have.property('ctime');
-                    info.should.have.property('isDirectory', true);
-                    done();
-                } catch (err){
-                    done(err);
-                }
+                    _stats.should.be.eql(stats);
+                }).nodeify(done);
             });
             riakfs.mkdir('/testDir');
         });
@@ -56,38 +41,23 @@ describe('#events', function() {
     describe('rename', function() {
 
         it('file', function(done) {
-            riakfs.once('rename', function(old, _new, info) {
-                try {
+            riakfs.once('rename', function(old, _new, stats) {
+                riakfs.stat(_new).then(function (_stats) {
                     old.should.be.eql('/test');
                     _new.should.be.eql('/test1');
-                    info.should.be.an('object');
-                    info.should.have.property('mtime');
-                    info.should.have.property('ctime');
-                    info.should.have.property('size', 5);
-                    info.should.have.property('contentType');
-                    info.should.have.property('version', 0);
-                    info.should.have.property('id');
-                    done();
-                } catch (err){
-                    done(err);
-                }
+                    _stats.should.be.eql(stats);
+                }).nodeify(done);
             });
             riakfs.rename('/test', '/test1');
         });
 
         it('directory', function(done) {
-            riakfs.once('rename', function(old, _new, info) {
-                try {
+            riakfs.once('rename', function(old, _new, stats) {
+                riakfs.stat(_new).then(function (_stats) {
                     old.should.be.eql('/testDir');
                     _new.should.be.eql('/testDir1');
-                    info.should.be.an('object');
-                    info.should.have.property('mtime');
-                    info.should.have.property('ctime');
-                    info.should.have.property('isDirectory', true);
-                    done();
-                } catch (err){
-                    done(err);
-                }
+                    _stats.should.be.eql(stats);
+                }).nodeify(done);
             });
             riakfs.rename('/testDir', '/testDir1');
         });
@@ -96,20 +66,11 @@ describe('#events', function() {
 
     describe('change', function() {
         it('file', function(done) {
-            riakfs.once('change', function(filename, info) {
-                try {
+            riakfs.once('change', function(filename, stats) {
+                riakfs.stat(filename).then(function (_stats) {
                     filename.should.be.eql('/test1');
-                    info.should.be.an('object');
-                    info.should.have.property('mtime');
-                    info.should.have.property('ctime');
-                    info.should.have.property('size', 11);
-                    info.should.have.property('contentType');
-                    info.should.have.property('version', 1);
-                    info.should.have.property('id');
-                    done();
-                } catch (err){
-                    done(err);
-                }
+                    _stats.should.be.eql(stats);
+                }).nodeify(done);
             });
             riakfs.appendFile('/test1', ' world');
         });
@@ -118,38 +79,37 @@ describe('#events', function() {
     describe('delete', function() {
 
         it('file', function(done) {
-            riakfs.once('delete', function(filename, info) {
+            var _stats;
+            riakfs.once('delete', function(filename, stats) {
                 try {
                     filename.should.be.eql('/test1');
-                    info.should.be.an('object');
-                    info.should.have.property('mtime');
-                    info.should.have.property('ctime');
-                    info.should.have.property('size', 11);
-                    info.should.have.property('contentType');
-                    info.should.have.property('version', 1);
-                    info.should.have.property('id');
+                    _stats.should.eql(stats);
                     done();
                 } catch (err){
                     done(err);
                 }
             });
-            riakfs.unlink('/test1');
+            riakfs.stat('/test1').then(function (_s) {
+                _stats = _s;
+                return riakfs.unlink('/test1');
+            });
         });
 
         it('directory', function(done) {
-            riakfs.once('delete', function(filename, info) {
+            var _stats;
+            riakfs.once('delete', function(filename, stats) {
                 try {
                     filename.should.be.eql('/testDir1');
-                    info.should.be.an('object');
-                    info.should.have.property('mtime');
-                    info.should.have.property('ctime');
-                    info.should.have.property('isDirectory', true);
+                    _stats.should.eql(stats);
                     done();
                 } catch (err){
                     done(err);
                 }
             });
-            riakfs.rmdir('/testDir1');
+            riakfs.stat('/testDir1').then(function (_s) {
+                _stats = _s;
+                return riakfs.rmdir('/testDir1');
+            });
         });
 
     });

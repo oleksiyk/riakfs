@@ -40,8 +40,10 @@ describe('Files', function() {
                         fd.should.have.property('flags', flag);
                         fd.should.have.property('file').that.is.an('object');
                         fd.should.have.property('filename', '/testnewfile_' + flag);
-                        fd.file.should.have.property('mtime').that.is.closeTo(new Date(), 500);
-                        fd.file.should.have.property('ctime').that.is.closeTo(new Date(), 500);
+                        fd.file.should.have.property('mtime');
+                        new Date(fd.file.mtime).should.be.closeTo(new Date(), 500);
+                        fd.file.should.have.property('ctime');
+                        new Date(fd.file.ctime).should.be.closeTo(new Date(), 500);
                         fd.file.should.have.property('size');
                         fd.file.should.have.property('version', -1);
                     });

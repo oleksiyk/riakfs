@@ -67,24 +67,45 @@ describe('Trash - #unlink', function() {
         });
     });
 
-    it('should emit delete event when file is moved to Trash', function (done) {
+    it('should emit delete event when file directly unlinked', function (done) {
         riakfs.writeFile('/test1', 'hello').then(function () {
-            riakfs.once('delete', function(filename, info) {
+            riakfs.once('delete', function(filename, stats) {
                 try {
                     filename.should.be.eql('/test1');
-                    info.should.be.an('object');
-                    info.should.have.property('mtime');
-                    info.should.have.property('ctime');
-                    info.should.have.property('size', 5);
-                    info.should.have.property('contentType');
-                    info.should.have.property('version', 0);
-                    info.should.have.property('id');
+                    stats.should.be.an('object');
+                    stats.should.have.property('mtime');
+                    stats.should.have.property('ctime');
+                    stats.should.have.property('size', 5);
+                    stats.should.have.property('contentType');
+                    stats.file.should.have.property('version', 0);
+                    stats.file.should.have.property('id');
                     done();
                 } catch (err){
                     done(err);
                 }
             });
             riakfs.unlink('/test1');
+        });
+    });
+
+    it('should emit delete event when file is moved to Trash', function (done) {
+        riakfs.writeFile('/test2', 'hello').then(function () {
+            riakfs.once('delete', function(filename, stats) {
+                try {
+                    filename.should.be.eql('/test2');
+                    stats.should.be.an('object');
+                    stats.should.have.property('mtime');
+                    stats.should.have.property('ctime');
+                    stats.should.have.property('size', 5);
+                    stats.should.have.property('contentType');
+                    stats.file.should.have.property('version', 0);
+                    stats.file.should.have.property('id');
+                    done();
+                } catch (err){
+                    done(err);
+                }
+            });
+            riakfs.rename('/test2', '/.Trash/test2');
         });
     });
 
