@@ -21,7 +21,7 @@ global.chai.use(chaiAsPromised);
 var sinonChai = require("sinon-chai");
 global.chai.use(sinonChai);
 
-var path = require('path')
+var path = require('path');
 
 global.testfiles = [
     {
@@ -35,7 +35,7 @@ global.testfiles = [
         md5: '0527806e48c5f6ca0131e36f8ad27c7e',
         contentType: 'image/png'
     }
-]
+];
 
 global.connect = function(options) {
     options = _.partialRight(_.merge, _.defaults)(options || {}, {
@@ -49,6 +49,6 @@ global.connect = function(options) {
         events: false
     });
 
-    return require(global.libPath).create(options)
-}
+    return require(global.libPath).create(options);
+};
 

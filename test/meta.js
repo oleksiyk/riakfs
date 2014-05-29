@@ -2,7 +2,7 @@
 
 /* global describe, it, connect, before */
 
-var Promise = require('bluebird')
+var Promise = require('bluebird');
 
 describe('#meta', function() {
 
@@ -10,9 +10,9 @@ describe('#meta', function() {
 
     before(function() {
         return connect().then(function(_riakfs) {
-            riakfs = _riakfs
-        })
-    })
+            riakfs = _riakfs;
+        });
+    });
 
     it('#open should save meta information with file', function() {
         var file = {
@@ -20,18 +20,18 @@ describe('#meta', function() {
             meta: {
                 someKey: 'someValue'
             }
-        }
+        };
 
         return riakfs.open(file, 'w').then(function(fd) {
-            return riakfs.close(fd)
+            return riakfs.close(fd);
         })
         .then(function() {
             return riakfs.stat(file.filename).then(function(stats) {
-                stats.should.be.an('object')
-                stats.file.meta.should.be.an('object').and.have.property('someKey', 'someValue')
-            })
-        })
-    })
+                stats.should.be.an('object');
+                stats.file.meta.should.be.an('object').and.have.property('someKey', 'someValue');
+            });
+        });
+    });
 
     it('#writeFile should save meta information with file', function() {
         var file = {
@@ -39,17 +39,17 @@ describe('#meta', function() {
             meta: {
                 someKey: 'someValue2'
             }
-        }
+        };
 
         return riakfs.writeFile(file, 'test')
         .then(function() {
             return riakfs.stat(file.filename).then(function(stats) {
-                stats.should.be.an('object')
-                stats.size.should.eql(4)
-                stats.file.meta.should.be.an('object').and.have.property('someKey', 'someValue2')
-            })
-        })
-    })
+                stats.should.be.an('object');
+                stats.size.should.eql(4);
+                stats.file.meta.should.be.an('object').and.have.property('someKey', 'someValue2');
+            });
+        });
+    });
 
     it('#createWriteStream should save meta information with file', function() {
         var file = {
@@ -57,23 +57,23 @@ describe('#meta', function() {
             meta: {
                 someKey: 'someValue3'
             }
-        }
+        };
 
         return new Promise(function(resolve, reject) {
-            var stream = riakfs.createWriteStream(file)
-            stream.on('error', reject)
-            stream.on('close', resolve)
+            var stream = riakfs.createWriteStream(file);
+            stream.on('error', reject);
+            stream.on('close', resolve);
 
-            stream.end('test')
+            stream.end('test');
         })
         .then(function() {
             return riakfs.stat(file.filename).then(function(stats) {
-                stats.should.be.an('object')
-                stats.size.should.eql(4)
-                stats.file.meta.should.be.an('object').and.have.property('someKey', 'someValue3')
-            })
-        })
-    })
+                stats.should.be.an('object');
+                stats.size.should.eql(4);
+                stats.file.meta.should.be.an('object').and.have.property('someKey', 'someValue3');
+            });
+        });
+    });
 
     it('#findAll should find files by custom indexes', function() {
         var file = {
@@ -85,7 +85,7 @@ describe('#meta', function() {
                 key: 'test_bin',
                 value: 'testValue'
             }]
-        }
+        };
 
         return riakfs.writeFile(file, '1234567')
         .then(function() {
@@ -93,12 +93,12 @@ describe('#meta', function() {
                 index: 'test_bin',
                 key: 'testValue'
             }).then(function(search) {
-                search.should.be.an('object')
-                search.keys.should.be.an('array').and.have.length(1)
-                search.keys[0].should.be.eql(file.filename)
-            })
-        })
-    })
+                search.should.be.an('object');
+                search.keys.should.be.an('array').and.have.length(1);
+                search.keys[0].should.be.eql(file.filename);
+            });
+        });
+    });
 
     it('#findAll should find renamed files by custom indexes', function() {
         var file = {
@@ -110,23 +110,23 @@ describe('#meta', function() {
                 key: 'test_rename_bin',
                 value: 'testValue'
             }]
-        }
+        };
 
         return riakfs.writeFile(file, '1234567')
         .then(function() {
-            return riakfs.rename(file.filename, '/testFile41-renamed')
+            return riakfs.rename(file.filename, '/testFile41-renamed');
         })
         .then(function() {
             return riakfs.findAll({
                 index: 'test_rename_bin',
                 key: 'testValue'
             }).then(function(search) {
-                search.should.be.an('object')
-                search.keys.should.be.an('array').and.have.length(1)
-                search.keys[0].should.be.eql('/testFile41-renamed')
-            })
-        })
-    })
+                search.should.be.an('object');
+                search.keys.should.be.an('array').and.have.length(1);
+                search.keys[0].should.be.eql('/testFile41-renamed');
+            });
+        });
+    });
 
     it('#updateMeta should fully update meta information', function() {
         var file = {
@@ -134,30 +134,30 @@ describe('#meta', function() {
             meta: {
                 someKey: 'someValue5'
             }
-        }
+        };
 
         return riakfs.writeFile(file, 'test')
         .then(function() {
             return riakfs.stat(file.filename).then(function(stats) {
-                stats.should.be.an('object')
-                stats.size.should.eql(4)
-                stats.file.meta.should.be.an('object').and.have.property('someKey', 'someValue5')
-            })
+                stats.should.be.an('object');
+                stats.size.should.eql(4);
+                stats.file.meta.should.be.an('object').and.have.property('someKey', 'someValue5');
+            });
         })
         .then(function() {
             file.meta = {
                 someNewKey: 'someNewValue'
-            }
-            return riakfs.updateMeta(file.filename, file)
+            };
+            return riakfs.updateMeta(file.filename, file);
         })
         .then(function() {
             return riakfs.stat(file.filename).then(function(stats) {
-                stats.should.be.an('object')
-                stats.file.meta.should.be.an('object').and.have.property('someNewKey', 'someNewValue')
-                stats.file.meta.should.not.have.property('someKey')
-            })
-        })
-    })
+                stats.should.be.an('object');
+                stats.file.meta.should.be.an('object').and.have.property('someNewKey', 'someNewValue');
+                stats.file.meta.should.not.have.property('someKey');
+            });
+        });
+    });
 
     it('#updateMeta should save new meta information', function() {
         var file = {
@@ -165,26 +165,26 @@ describe('#meta', function() {
             meta: {
                 someKey: 'someValue'
             }
-        }
+        };
 
         return riakfs.writeFile(file.filename, 'test')
         .then(function() {
             return riakfs.stat(file.filename).then(function(stats) {
-                stats.should.be.an('object')
-                stats.size.should.eql(4)
-                stats.file.should.not.have.property('meta')
-            })
+                stats.should.be.an('object');
+                stats.size.should.eql(4);
+                stats.file.should.not.have.property('meta');
+            });
         })
         .then(function() {
-            return riakfs.updateMeta(file.filename, file)
+            return riakfs.updateMeta(file.filename, file);
         })
         .then(function() {
             return riakfs.stat(file.filename).then(function(stats) {
-                stats.should.be.an('object')
-                stats.file.meta.should.be.an('object').and.have.property('someKey', 'someValue')
-            })
-        })
-    })
+                stats.should.be.an('object');
+                stats.file.meta.should.be.an('object').and.have.property('someKey', 'someValue');
+            });
+        });
+    });
 
     it('#setMeta should save merge meta information with file', function() {
         var file = {
@@ -192,30 +192,30 @@ describe('#meta', function() {
             meta: {
                 someKey: 'someValue6'
             }
-        }
+        };
 
         return riakfs.writeFile(file, 'test')
         .then(function() {
             return riakfs.stat(file.filename).then(function(stats) {
-                stats.should.be.an('object')
-                stats.size.should.eql(4)
-                stats.file.meta.should.be.an('object').and.have.property('someKey', 'someValue6')
-            })
+                stats.should.be.an('object');
+                stats.size.should.eql(4);
+                stats.file.meta.should.be.an('object').and.have.property('someKey', 'someValue6');
+            });
         })
         .then(function() {
             file.meta = {
                 someNewKey: 'someNewValue'
-            }
-            return riakfs.setMeta(file.filename, file)
+            };
+            return riakfs.setMeta(file.filename, file);
         })
         .then(function() {
             return riakfs.stat(file.filename).then(function(stats) {
-                stats.should.be.an('object')
-                stats.file.meta.should.be.an('object').and.have.property('someNewKey', 'someNewValue')
-                stats.file.meta.should.have.property('someKey', 'someValue6')
-            })
-        })
-    })
+                stats.should.be.an('object');
+                stats.file.meta.should.be.an('object').and.have.property('someNewKey', 'someNewValue');
+                stats.file.meta.should.have.property('someKey', 'someValue6');
+            });
+        });
+    });
 
     it('#setMeta should set meta information', function() {
         var file = {
@@ -223,25 +223,25 @@ describe('#meta', function() {
             meta: {
                 someKey: 'someValue'
             }
-        }
+        };
 
         return riakfs.writeFile(file.filename, 'test')
         .then(function() {
             return riakfs.stat(file.filename).then(function(stats) {
-                stats.should.be.an('object')
-                stats.size.should.eql(4)
-                stats.file.should.not.have.property('meta')
-            })
+                stats.should.be.an('object');
+                stats.size.should.eql(4);
+                stats.file.should.not.have.property('meta');
+            });
         })
         .then(function() {
-            return riakfs.setMeta(file.filename, file)
+            return riakfs.setMeta(file.filename, file);
         })
         .then(function() {
             return riakfs.stat(file.filename).then(function(stats) {
-                stats.should.be.an('object')
-                stats.file.meta.should.be.an('object').and.have.property('someKey', 'someValue')
-            })
-        })
-    })
+                stats.should.be.an('object');
+                stats.file.meta.should.be.an('object').and.have.property('someKey', 'someValue');
+            });
+        });
+    });
 
-})
+});

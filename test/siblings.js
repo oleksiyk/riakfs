@@ -2,10 +2,10 @@
 
 /* global before, describe, it, connect, testfiles */
 
-var Promise = require('bluebird')
+var Promise = require('bluebird');
 var uid2    = require('uid2');
 var path    = require('path');
-var fs      = require('fs')
+var fs      = require('fs');
 
 describe('Siblings', function() {
 
@@ -13,9 +13,9 @@ describe('Siblings', function() {
 
     before(function() {
         return connect().then(function(_riakfs) {
-            riakfs = _riakfs
-        })
-    })
+            riakfs = _riakfs;
+        });
+    });
 
     it('mkdir immediately after rmdir (tombstone test)', function() {
         return riakfs.mkdir('/test').then(function() {
@@ -26,24 +26,24 @@ describe('Siblings', function() {
                         key: '/test',
                         type: riakfs.options.metaType
                     }).then(function(reply) {
-                        reply.content.should.be.an('array').and.have.length(1)
-                    })
-                })
-            })
-        })
-    })
+                        reply.content.should.be.an('array').and.have.length(1);
+                    });
+                });
+            });
+        });
+    });
 
     it('open immediately after unlink (tombstone test)', function() {
         return riakfs.open('/testFile', 'w').then(function(fd) {
-            return riakfs.close(fd)
+            return riakfs.close(fd);
         })
         .then(function() {
-            return riakfs.unlink('/testFile')
+            return riakfs.unlink('/testFile');
         })
         .then(function() {
             return riakfs.open('/testFile', 'w').then(function(fd) {
-                return riakfs.close(fd)
-            })
+                return riakfs.close(fd);
+            });
         })
         .then(function() {
             return riakfs.riak.get({
@@ -51,21 +51,21 @@ describe('Siblings', function() {
                 key: '/testFile',
                 type: riakfs.options.metaType
             }).then(function(reply) {
-                reply.content.should.be.an('array').and.have.length(1)
-            })
-        })
+                reply.content.should.be.an('array').and.have.length(1);
+            });
+        });
     })
 
     testfiles.forEach(function(f) {
         it.skip('file + file siblings without proper content', function() {
             var id;
             return Promise.promisify(fs.readFile)(f.path).then(function(data) {
-                return riakfs.writeFile('/' + path.basename(f.path), data)
+                return riakfs.writeFile('/' + path.basename(f.path), data);
             })
             .then(function() {
                 return riakfs.stat('/' + path.basename(f.path)).then(function(stats) {
-                    id = stats.file.id
-                })
+                    id = stats.file.id;
+                });
             })
             .then(function() {
                 // make several siblings
@@ -83,18 +83,18 @@ describe('Siblings', function() {
                             content_type: 'application/json'
                         },
                         type: riakfs.options.metaType
-                    })
-                })
+                    });
+                });
             })
             .then(function() {
                 return riakfs.stat('/' + path.basename(f.path)).then(function(stats) {
-                    stats.should.be.an('object')
-                    stats.file.id.should.be.eql(id)
-                    stats.size.should.be.eql(f.size)
-                })
-            })
-        })
-    })
+                    stats.should.be.an('object');
+                    stats.file.id.should.be.eql(id);
+                    stats.size.should.be.eql(f.size);
+                });
+            });
+        });
+    });
 
     it('file + deleted file sibling', function() {
         var id, vclock;
@@ -107,10 +107,10 @@ describe('Siblings', function() {
                     head: true,
                     type: riakfs.options.metaType
                 }).then(function(_reply) {
-                    vclock = _reply.vclock
-                    return riakfs.close(fd)
-                })
-            })
+                    vclock = _reply.vclock;
+                    return riakfs.close(fd);
+                });
+            });
         })
         .then(function() {
             return riakfs.riak.del({
@@ -118,12 +118,12 @@ describe('Siblings', function() {
                 key: '/testDeletedFile',
                 vclock: vclock,
                 type: riakfs.options.metaType
-            })
+            });
         })
         .then(function() {
-            return riakfs.stat('/testDeletedFile').should.be.rejected.and.eventually.have.property('code', 'ENOENT')
-        })
-    })
+            return riakfs.stat('/testDeletedFile').should.be.rejected.and.eventually.have.property('code', 'ENOENT');
+        });
+    });
 
     it.skip('file + empty directory sibling', function() {
         var id, vclock;
@@ -136,10 +136,10 @@ describe('Siblings', function() {
                     head: true,
                     type: riakfs.options.metaType
                 }).then(function(_reply) {
-                    vclock = _reply.vclock
-                    return riakfs.close(fd)
-                })
-            })
+                    vclock = _reply.vclock;
+                    return riakfs.close(fd);
+                });
+            });
         })
         .then(function() {
             return riakfs.riak.put({
@@ -155,15 +155,15 @@ describe('Siblings', function() {
                     content_type: 'application/json'
                 },
                 type: riakfs.options.metaType
-            })
+            });
         })
         .then(function() {
             return riakfs.stat('/testDirOrFile').then(function(stats) {
-                stats.should.be.an('object').and.have.property('file').that.have.property('id')
-                stats.file.id.should.be.eql(id)
-                stats.size.should.be.eql(4)
-            })
-        })
-    })
+                stats.should.be.an('object').and.have.property('file').that.have.property('id');
+                stats.file.id.should.be.eql(id);
+                stats.size.should.be.eql(4);
+            });
+        });
+    });
 
-})
+});

@@ -22,7 +22,7 @@
     "maxstatements": 50, // set the max number of statements allowed per function
     "maxlen": 150, // set the maximum length of a line
 
-    "asi": true, // suppresses warnings about missing semicolons
+    "asi": false, // suppresses warnings about missing semicolons
     "eqnull": false, // suppresses warnings about == null
     "esnext": false, // tells JSHint that your code uses ECMAScript 6 specific syntax
     "globalstrict": true, // suppresses warnings about the use of global strict mode
