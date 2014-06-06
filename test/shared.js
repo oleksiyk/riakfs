@@ -251,7 +251,7 @@ describe('#shared directory', function() {
             });
         })
         .then(function() {
-            return riakfs2.updateMeta(file.filename, file);
+            return riakfs2.updateMeta(file.filename, file.meta);
         })
         .then(function() {
             return riakfs1.stat('/dir1/testFile').then(function(stats) {
@@ -268,7 +268,7 @@ describe('#shared directory', function() {
                 someKey: 'someValue'
             }
         };
-        return riakfs3.updateMeta(file.filename, file).should.be.rejected.and.eventually.have.property('code', 'EACCES');
+        return riakfs3.updateMeta(file.filename, file.meta).should.be.rejected.and.eventually.have.property('code', 'EACCES');
     });
 
     it('#unlink', function() {
