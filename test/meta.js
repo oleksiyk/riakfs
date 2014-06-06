@@ -75,7 +75,7 @@ describe('#meta', function() {
         });
     });
 
-    it('#findAll should find files by custom indexes', function() {
+    it.skip('#findAll should find files by custom indexes', function() {
         var file = {
             filename: '/testFile4',
             meta: {
@@ -100,7 +100,7 @@ describe('#meta', function() {
         });
     });
 
-    it('#findAll should find renamed files by custom indexes', function() {
+    it.skip('#findAll should find renamed files by custom indexes', function() {
         var file = {
             filename: '/testFile41',
             meta: {
@@ -148,7 +148,7 @@ describe('#meta', function() {
             file.meta = {
                 someNewKey: 'someNewValue'
             };
-            return riakfs.updateMeta(file.filename, file);
+            return riakfs.updateMeta(file.filename, file.meta);
         })
         .then(function() {
             return riakfs.stat(file.filename).then(function(stats) {
@@ -176,7 +176,7 @@ describe('#meta', function() {
             });
         })
         .then(function() {
-            return riakfs.updateMeta(file.filename, file);
+            return riakfs.updateMeta(file.filename, file.meta);
         })
         .then(function() {
             return riakfs.stat(file.filename).then(function(stats) {
@@ -186,7 +186,7 @@ describe('#meta', function() {
         });
     });
 
-    it('#setMeta should save merge meta information with file', function() {
+    it('#setMeta should save merged meta information with file', function() {
         var file = {
             filename: '/testFile6',
             meta: {
@@ -206,7 +206,7 @@ describe('#meta', function() {
             file.meta = {
                 someNewKey: 'someNewValue'
             };
-            return riakfs.setMeta(file.filename, file);
+            return riakfs.setMeta(file.filename, file.meta);
         })
         .then(function() {
             return riakfs.stat(file.filename).then(function(stats) {
@@ -234,7 +234,7 @@ describe('#meta', function() {
             });
         })
         .then(function() {
-            return riakfs.setMeta(file.filename, file);
+            return riakfs.setMeta(file.filename, file.meta);
         })
         .then(function() {
             return riakfs.stat(file.filename).then(function(stats) {
