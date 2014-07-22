@@ -34,6 +34,14 @@ describe('Directories', function() {
             return riakfs.mkdir('/test').should.be.rejected.and.eventually.have.property('code', 'EEXIST');
         });
 
+        it('should not create directory with path over 4096 characters - ENAMETOOLONG', function() {
+            var _path = '/test';
+            for(var i = 0; i < 4096; i ++){
+                _path += i;
+            }
+            return riakfs.mkdir(_path).should.be.rejected.and.eventually.have.property('code', 'ENAMETOOLONG');
+        });
+
         it('should not create directories recursively - ENOENT', function() {
             return riakfs.mkdir('/aaa/bbb/ccc').should.be.rejected.and.eventually.have.property('code', 'ENOENT');
         });

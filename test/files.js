@@ -48,6 +48,14 @@ describe('Files', function() {
                         fd.file.should.have.property('version', -1);
                     });
             });
+
+            it('should not create file with path name over 4096 characters', function () {
+                var _path = '/testnewfile_';
+                for(var i = 0; i < 4096; i ++){
+                    _path += i;
+                }
+                return riakfs.open(_path + flag, flag).should.be.rejected.and.eventually.have.property('code', 'ENAMETOOLONG');
+            });
         });
 
         ['wx', 'wx+', 'ax', 'ax+'].forEach(function(flag) {
