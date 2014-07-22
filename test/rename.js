@@ -49,6 +49,18 @@ describe('#rename', function() {
         });
     });
 
+    it('should fail if old is parent for new (bigger nesting level)', function() {
+        return createTestHierachy('/t1.1').then(function() {
+            return riakfs.rename('/t1.1/dir1', '/t1.1/dir1/xxxx/yyy/zzz').should.be.rejected.and.eventually.have.property('code', 'EINVAL');
+        });
+    });
+
+    it('should fail if old is equal new', function() {
+        return createTestHierachy('/t1.2').then(function() {
+            return riakfs.rename('/t1.2/dir1', '/t1.2/dir1');
+        });
+    });
+
     it('should fail if path prefix for new doesn\'t exist', function() {
         return createTestHierachy('/t2').then(function() {
             return riakfs.rename('/t2/dir1/dir2', '/t2/xxx/dir2').should.be.rejected.and.eventually.have.property('code', 'ENOENT');
