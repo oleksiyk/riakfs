@@ -332,12 +332,12 @@ describe('Files', function() {
             });
         });
 
-        it('should fail when data is not buffer or string (undefined)', function() {
-            return riakfs.writeFile('/testWrongData').should.be.rejected.and.eventually.have.property('code', 'EINVAL');
+        it('should not fail when data is not buffer or string (undefined)', function() {
+            return riakfs.writeFile('/testWrongData');
         });
 
-        it('should fail when data is not buffer or string', function() {
-            return riakfs.writeFile('/testWrongData', 123).should.be.rejected.and.eventually.have.property('code', 'EINVAL');
+        it('should not fail when data is not buffer or string', function() {
+            return riakfs.writeFile('/testWrongData', 123);
         });
     });
 
