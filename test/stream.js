@@ -67,4 +67,39 @@ describe('Stream', function() {
         });
     });
 
+    it.only('#writestream should correctly append files', function() {
+        return new Promise(function(resolve, reject) {
+            var writeStream = riakfs.createWriteStream('/writeStream_append', {
+                flags: 'w',
+                encoding: 'utf8',
+            });
+            writeStream.on('error', reject);
+            writeStream.on('close', resolve);
+
+            writeStream.end('abcde');
+        })
+        .then(function () {
+            return riakfs.stat('/writeStream_append').then(function(file) {
+                file.size.should.be.eql(5);
+            });
+        })
+        .then(function () {
+            return new Promise(function(resolve, reject) {
+                var writeStream = riakfs.createWriteStream('/writeStream_append', {
+                    flags: 'a',
+                    encoding: 'utf8',
+                });
+                writeStream.on('error', reject);
+                writeStream.on('close', resolve);
+
+                writeStream.end('fgh');
+            });
+        })
+        .then(function () {
+            return riakfs.stat('/writeStream_append').then(function(file) {
+                file.size.should.be.eql(8);
+            });
+        });
+    });
+
 });
