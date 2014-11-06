@@ -241,7 +241,9 @@ describe('Files', function() {
             })
             .then(function(fd) {
                 var buffer = new Buffer(100);
-                return riakfs.read(fd, buffer, 0, 10, 0);
+                return riakfs.read(fd, buffer, 0, 10, 0).then(function (bytesRead) {
+                    bytesRead.should.be.eql(0);
+                });
             });
         });
 
@@ -256,8 +258,9 @@ describe('Files', function() {
             })
             .then(function(fd) {
                 var buffer = new Buffer(4);
-                return riakfs.read(fd, buffer, 0, 4, 0).then(function() {
+                return riakfs.read(fd, buffer, 0, 4, 0).then(function(bytesRead) {
                     buffer.toString().should.be.eql('test');
+                    bytesRead.should.be.eql(4);
                 });
             });
         });
@@ -273,8 +276,9 @@ describe('Files', function() {
             })
             .then(function(fd) {
                 var buffer = new Buffer(2);
-                return riakfs.read(fd, buffer, 0, 2, 2).then(function() {
+                return riakfs.read(fd, buffer, 0, 2, 2).then(function(bytesRead) {
                     buffer.toString().should.be.eql('st');
+                    bytesRead.should.be.eql(2);
                 });
             });
         });

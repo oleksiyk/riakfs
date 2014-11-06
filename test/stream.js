@@ -67,7 +67,7 @@ describe('Stream', function() {
         });
     });
 
-    it.only('#writestream should correctly append files', function() {
+    it('#writestream should correctly append files', function() {
         return new Promise(function(resolve, reject) {
             var writeStream = riakfs.createWriteStream('/writeStream_append', {
                 flags: 'w',
