@@ -159,4 +159,12 @@ describe('Directories', function() {
 
     });
 
+    describe('#rmTree', function() {
+        it('should remove directory recursively', function () {
+            return riakfs.rmTree('/dir1').then(function () {
+               return riakfs.stat('/dir1').should.be.rejected.and.eventually.have.property('code', 'ENOENT');
+            });
+        });
+    });
+
 });
