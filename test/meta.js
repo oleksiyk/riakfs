@@ -75,6 +75,7 @@ describe('#meta', function() {
         });
     });
 
+    /*
     it.skip('#findAll should find files by custom indexes', function() {
         var file = {
             filename: '/testFile4',
@@ -127,6 +128,7 @@ describe('#meta', function() {
             });
         });
     });
+    */
 
     it('#updateMeta should fully update meta information', function() {
         var file = {
