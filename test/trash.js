@@ -67,7 +67,7 @@ describe('Trash - #unlink', function() {
         });
     });
 
-    it('should emit delete event when file directly unlinked', function (done) {
+    it.skip('should emit delete event when file directly unlinked', function (done) {
         riakfs.writeFile('/test1', 'hello').then(function () {
             riakfs.once('delete', function(filename, stats) {
                 try {
@@ -88,7 +88,7 @@ describe('Trash - #unlink', function() {
         });
     });
 
-    it('should emit delete event when file is moved to Trash', function (done) {
+    it.skip('should emit delete event when file is moved to Trash', function (done) {
         riakfs.writeFile('/test2', 'hello').then(function () {
             riakfs.once('delete', function(filename, stats) {
                 try {
