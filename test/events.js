@@ -2,7 +2,7 @@
 
 /* global describe, it, connect, before */
 
-// var Promise = require('bluebird')
+var Promise = require('bluebird');
 
 describe('#events', function() {
 
@@ -78,6 +78,19 @@ describe('#events', function() {
 
     describe('delete', function() {
 
+        before(function () {
+            return riakfs.makeTree('/dir1/dir2/dir3').then(function() {
+                return Promise.all([
+                    riakfs.writeFile('/dir1/test1', 'hello'),
+                    riakfs.writeFile('/dir1/test2', 'hello'),
+                    riakfs.writeFile('/dir1/dir2/test1', 'hello'),
+                    riakfs.writeFile('/dir1/dir2/test2', 'hello'),
+                    riakfs.writeFile('/dir1/dir2/dir3/test1', 'hello'),
+                    riakfs.writeFile('/dir1/dir2/dir3/test2', 'hello')
+                ]);
+            });
+        });
+
         it('file', function(done) {
             var _stats;
             riakfs.once('delete', function(filename, stats) {
@@ -110,6 +123,16 @@ describe('#events', function() {
                 _stats = _s;
                 return riakfs.rmdir('/testDir1');
             });
+        });
+
+        it('rmTree', function(done) {
+            var c = 0;
+            riakfs.on('delete', function(/*filename*/) {
+                if(++c === 9){
+                    done();
+                }
+            });
+            riakfs.rmTree('/dir1');
         });
 
     });
