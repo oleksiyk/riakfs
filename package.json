@@ -11,8 +11,8 @@
     "keywords": ["riak", "fs"],
     "dependencies": {
         "riakpbc-promised": "git://github.com/oleksiyk/riakpbc-promised",
-        "bluebird": "~=1.2.x",
-        "lodash": "~=2.4.*",
+        "bluebird": "~=3.x.x",
+        "lodash": "~=3.x.x",
         "mmmagic": "=0.3.7",
         "uid2": "~=0.0.3"
     },
