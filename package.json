@@ -6,7 +6,7 @@
         "name": "Oleksiy Krivoshey",
         "email": "oleksiyk@gmail.com"
     },
-    "version": "1.5.0",
+    "version": "1.5.1",
     "main": "./lib/index.js",
     "keywords": ["riak", "fs"],
     "dependencies": {
@@ -32,7 +32,6 @@
         "type": "git",
         "url": "git://github.com/oleksiyk/riakfs.git"
     },
-    "readme": "Filesystem implementation in Riak that emulates node.js 'fs' module",
     "readmeFilename": "README.md",
     "license": "MIT"
 }
