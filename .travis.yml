@@ -7,6 +7,16 @@ node_js:
 services:
   - riak
 
+env:
+  - CXX=g++-4.8
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.8
+
+
 # before_install:
 #   - "sudo apt-get purge riak"
 #   - "curl -sO http://s3.amazonaws.com/downloads.basho.com/riak/2.0/2.0.0beta1/ubuntu/precise/riak_2.0.0beta1-1_amd64.deb"
