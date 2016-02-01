@@ -1,27 +1,25 @@
-"use strict";
+'use strict';
 
 var uid2 = require('uid2');
 var _    = require('lodash');
+var path = require('path');
 
-global.libPath = (process && process.env && process.env.RIAKFS_COV)
-    ? '../lib-cov'
-    : '../lib';
+/* eslint vars-on-top: 0 */
 
-global.sinon = require("sinon");
-global.chai = require("chai");
+global.sinon = require('sinon');
+global.chai = require('chai');
 
 global.assert = global.chai.assert;
+global.expect = global.chai.expect;
 global.should = global.chai.should();
 
 // https://github.com/domenic/chai-as-promised
-var chaiAsPromised = require("chai-as-promised");
+var chaiAsPromised = require('chai-as-promised');
 global.chai.use(chaiAsPromised);
 
 // https://github.com/domenic/sinon-chai
-var sinonChai = require("sinon-chai");
+var sinonChai = require('sinon-chai');
 global.chai.use(sinonChai);
-
-var path = require('path');
 
 global.testfiles = [
     {
@@ -37,18 +35,11 @@ global.testfiles = [
     }
 ];
 
-global.connect = function(options) {
-    options = _.partialRight(_.merge, _.defaults)(options || {}, {
+global.connect = function (options) {
+    options = _.defaultsDeep(options || {}, {
         root: 'TeSt-' + uid2(8),
-        riak: {
-            host: '127.0.0.1',
-            port: 8087,
-            minPool: 1,
-            maxPool: 3
-        },
         events: false
     });
 
-    return require(global.libPath).create(options);
+    return require('../lib/index').create(options);
 };
-

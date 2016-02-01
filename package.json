@@ -10,23 +10,26 @@
     "main": "./lib/index.js",
     "keywords": ["riak", "fs"],
     "dependencies": {
-        "riakpbc-promised": "git://github.com/oleksiyk/riakpbc-promised",
+        "no-riak": "git://github.com/oleksiyk/no-riak",
         "bluebird": "~=3.x.x",
-        "lodash": "~=3.x.x",
+        "lodash": "^4.1.0",
         "mmmagic": "=0.4.1",
         "uid2": "~=0.0.3"
     },
     "devDependencies": {
-        "mocha": "~=1.18.2",
-        "chai": "=1.9.1",
-        "sinon-chai": "~=2.5.0",
-        "chai-as-promised": "~=4.1.1"
+        "mocha": "~=2.3.4",
+        "chai": "~=3.4.1",
+        "sinon-chai": "~=2.8.0",
+        "chai-as-promised": "~=5.1.0",
+        "eslint": "^1.10.3",
+        "eslint-config-airbnb": "^3.1.0",
+        "istanbul": "^0.4.2"
     },
     "bugs": {
         "url": "https://github.com/oleksiyk/riakfs/issues"
     },
     "scripts": {
-        "test": "make test"
+        "test": "make"
     },
     "repository": {
         "type": "git",

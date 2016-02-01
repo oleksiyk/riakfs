@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 /* global describe, it, testfiles, before, connect */
 
@@ -6,18 +6,17 @@ var Promise = require('bluebird');
 var path    = require('path');
 var fs      = require('fs');
 
-describe('Stream', function() {
-
+describe('Stream', function () {
     var riakfs;
 
-    before(function() {
-        return connect().then(function(_riakfs) {
+    before(function () {
+        return connect().then(function (_riakfs) {
             riakfs = _riakfs;
         });
     });
 
-    function copyFileFromFilesystem(from, to){
-        return new Promise(function(resolve, reject) {
+    function copyFileFromFilesystem(from, to) {
+        return new Promise(function (resolve, reject) {
             var readStream = fs.createReadStream(from);
             var writeStream = riakfs.createWriteStream(to);
             readStream.on('error', reject);
@@ -28,13 +27,13 @@ describe('Stream', function() {
     }
 
     function md5FromStream(filename) {
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
             var shasum = require('crypto').createHash('md5');
             var s = riakfs.createReadStream(filename);
-            s.on('data', function(d) {
+            s.on('data', function (d) {
                 shasum.update(d);
             });
-            s.on('end', function() {
+            s.on('end', function () {
                 var d = shasum.digest('hex');
                 resolve(d);
             });
@@ -42,10 +41,10 @@ describe('Stream', function() {
         });
     }
 
-    testfiles.forEach(function(f) {
-        it('#writestream should correctly pipe from fs.ReadStream', function() {
-            return copyFileFromFilesystem(f.path, '/' + path.basename(f.path)).then(function() {
-                return riakfs.stat('/' + path.basename(f.path)).then(function(file) {
+    testfiles.forEach(function (f) {
+        it('#writestream should correctly pipe from fs.ReadStream', function () {
+            return copyFileFromFilesystem(f.path, '/' + path.basename(f.path)).then(function () {
+                return riakfs.stat('/' + path.basename(f.path)).then(function (file) {
                     file.size.should.be.eql(f.size);
                     file.contentType.should.be.eql(f.contentType);
                 });
@@ -53,22 +52,22 @@ describe('Stream', function() {
         });
     });
 
-    testfiles.forEach(function(f) {
-        it('#readstream should correctly read files', function() {
+    testfiles.forEach(function (f) {
+        it('#readstream should correctly read files', function () {
             return md5FromStream('/' + path.basename(f.path)).should.eventually.be.eql(f.md5);
         });
     });
 
-    it('#writestream should correctly truncate (overwrite) files', function() {
-        return copyFileFromFilesystem(testfiles[1].path, '/someimage').then(function() {
+    it('#writestream should correctly truncate (overwrite) files', function () {
+        return copyFileFromFilesystem(testfiles[1].path, '/someimage').then(function () {
             return copyFileFromFilesystem(testfiles[0].path, '/someimage');
-        }).then(function() {
+        }).then(function () {
             return md5FromStream('/someimage').should.eventually.be.eql(testfiles[0].md5);
         });
     });
 
-    it('#writestream should correctly append files', function() {
-        return new Promise(function(resolve, reject) {
+    it('#writestream should correctly append files', function () {
+        return new Promise(function (resolve, reject) {
             var writeStream = riakfs.createWriteStream('/writeStream_append', {
                 flags: 'w',
                 encoding: 'utf8',
@@ -79,12 +78,12 @@ describe('Stream', function() {
             writeStream.end('abcde');
         })
         .then(function () {
-            return riakfs.stat('/writeStream_append').then(function(file) {
+            return riakfs.stat('/writeStream_append').then(function (file) {
                 file.size.should.be.eql(5);
             });
         })
         .then(function () {
-            return new Promise(function(resolve, reject) {
+            return new Promise(function (resolve, reject) {
                 var writeStream = riakfs.createWriteStream('/writeStream_append', {
                     flags: 'a',
                     encoding: 'utf8',
@@ -96,10 +95,9 @@ describe('Stream', function() {
             });
         })
         .then(function () {
-            return riakfs.stat('/writeStream_append').then(function(file) {
+            return riakfs.stat('/writeStream_append').then(function (file) {
                 file.size.should.be.eql(8);
             });
         });
     });
-
 });
