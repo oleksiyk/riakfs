@@ -6,11 +6,11 @@
         "name": "Oleksiy Krivoshey",
         "email": "oleksiyk@gmail.com"
     },
-    "version": "1.5.1",
+    "version": "2.0.0",
     "main": "./lib/index.js",
     "keywords": ["riak", "fs"],
     "dependencies": {
-        "no-riak": "git://github.com/oleksiyk/no-riak",
+        "no-riak": "oleksiyk/no-riak",
         "bluebird": "~=3.x.x",
         "lodash": "^4.1.0",
         "mmmagic": "=0.4.1",
