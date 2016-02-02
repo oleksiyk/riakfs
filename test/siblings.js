@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 /* global before, describe, it, connect, testfiles */
 
@@ -7,25 +7,24 @@ var uid2    = require('uid2');
 var path    = require('path');
 var fs      = require('fs');
 
-describe('Siblings', function() {
-
+describe('Siblings', function () {
     var riakfs;
 
-    before(function() {
-        return connect().then(function(_riakfs) {
+    before(function () {
+        return connect().then(function (_riakfs) {
             riakfs = _riakfs;
         });
     });
 
-    it('mkdir immediately after rmdir (tombstone test)', function() {
-        return riakfs.mkdir('/test').then(function() {
-            return riakfs.rmdir('/test').then(function() {
-                return riakfs.mkdir('/test').then(function() {
+    it('mkdir immediately after rmdir (tombstone test)', function () {
+        return riakfs.mkdir('/test').then(function () {
+            return riakfs.rmdir('/test').then(function () {
+                return riakfs.mkdir('/test').then(function () {
                     return riakfs.riak.get({
                         bucket: riakfs.filesBucket,
                         key: '/test',
                         type: riakfs.options.metaType
-                    }).then(function(reply) {
+                    }).then(function (reply) {
                         reply.content.should.be.an('array').and.have.length(1);
                     });
                 });
@@ -33,43 +32,43 @@ describe('Siblings', function() {
         });
     });
 
-    it('open immediately after unlink (tombstone test)', function() {
-        return riakfs.open('/testFile', 'w').then(function(fd) {
+    it('open immediately after unlink (tombstone test)', function () {
+        return riakfs.open('/testFile', 'w').then(function (fd) {
             return riakfs.close(fd);
         })
-        .then(function() {
+        .then(function () {
             return riakfs.unlink('/testFile');
         })
-        .then(function() {
-            return riakfs.open('/testFile', 'w').then(function(fd) {
+        .then(function () {
+            return riakfs.open('/testFile', 'w').then(function (fd) {
                 return riakfs.close(fd);
             });
         })
-        .then(function() {
+        .then(function () {
             return riakfs.riak.get({
                 bucket: riakfs.filesBucket,
                 key: '/testFile',
                 type: riakfs.options.metaType
-            }).then(function(reply) {
+            }).then(function (reply) {
                 reply.content.should.be.an('array').and.have.length(1);
             });
         });
-    })
+    });
 
-    testfiles.forEach(function(f) {
-        it.skip('file + file siblings without proper content', function() {
+    testfiles.forEach(function (f) {
+        it.skip('file + file siblings without proper content', function () {
             var id;
-            return Promise.promisify(fs.readFile)(f.path).then(function(data) {
+            return Promise.promisify(fs.readFile)(f.path).then(function (data) {
                 return riakfs.writeFile('/' + path.basename(f.path), data);
             })
-            .then(function() {
-                return riakfs.stat('/' + path.basename(f.path)).then(function(stats) {
+            .then(function () {
+                return riakfs.stat('/' + path.basename(f.path)).then(function (stats) {
                     id = stats.file.id;
                 });
             })
-            .then(function() {
+            .then(function () {
                 // make several siblings
-                return Promise.map([0, 123, 456, 789], function(len) {
+                return Promise.map([0, 123, 456, 789], function (len) {
                     return riakfs.riak.put({
                         bucket: riakfs.filesBucket,
                         key: '/' + path.basename(f.path),
@@ -86,8 +85,8 @@ describe('Siblings', function() {
                     });
                 });
             })
-            .then(function() {
-                return riakfs.stat('/' + path.basename(f.path)).then(function(stats) {
+            .then(function () {
+                return riakfs.stat('/' + path.basename(f.path)).then(function (stats) {
                     stats.should.be.an('object');
                     stats.file.id.should.be.eql(id);
                     stats.size.should.be.eql(f.size);
@@ -96,23 +95,22 @@ describe('Siblings', function() {
         });
     });
 
-    it('file + deleted file sibling', function() {
-        var id, vclock;
-        return riakfs.open('/testDeletedFile', 'w').then(function(fd) {
-            id = fd.file.id;
-            return riakfs.write(fd, 'test', 0, 4, null).then(function() {
+    it('file + deleted file sibling', function () {
+        var vclock;
+        return riakfs.open('/testDeletedFile', 'w').then(function (fd) {
+            return riakfs.write(fd, 'test', 0, 4, null).then(function () {
                 return riakfs.riak.get({
                     bucket: riakfs.filesBucket,
                     key: '/testDeletedFile',
                     head: true,
                     type: riakfs.options.metaType
-                }).then(function(_reply) {
+                }).then(function (_reply) {
                     vclock = _reply.vclock;
                     return riakfs.close(fd);
                 });
             });
         })
-        .then(function() {
+        .then(function () {
             return riakfs.riak.del({
                 bucket: riakfs.filesBucket,
                 key: '/testDeletedFile',
@@ -120,28 +118,28 @@ describe('Siblings', function() {
                 type: riakfs.options.metaType
             });
         })
-        .then(function() {
+        .then(function () {
             return riakfs.stat('/testDeletedFile').should.be.rejected.and.eventually.have.property('code', 'ENOENT');
         });
     });
 
-    it.skip('file + empty directory sibling', function() {
+    it.skip('file + empty directory sibling', function () {
         var id, vclock;
-        return riakfs.open('/testDirOrFile', 'w').then(function(fd) {
+        return riakfs.open('/testDirOrFile', 'w').then(function (fd) {
             id = fd.file.id;
-            return riakfs.write(fd, 'test', 0, 4, null).then(function() {
+            return riakfs.write(fd, 'test', 0, 4, null).then(function () {
                 return riakfs.riak.get({
                     bucket: riakfs.filesBucket,
                     key: '/testDirOrFile',
                     head: true,
                     type: riakfs.options.metaType
-                }).then(function(_reply) {
+                }).then(function (_reply) {
                     vclock = _reply.vclock;
                     return riakfs.close(fd);
                 });
             });
         })
-        .then(function() {
+        .then(function () {
             return riakfs.riak.put({
                 bucket: riakfs.filesBucket,
                 key: '/testDirOrFile',
@@ -157,13 +155,12 @@ describe('Siblings', function() {
                 type: riakfs.options.metaType
             });
         })
-        .then(function() {
-            return riakfs.stat('/testDirOrFile').then(function(stats) {
+        .then(function () {
+            return riakfs.stat('/testDirOrFile').then(function (stats) {
                 stats.should.be.an('object').and.have.property('file').that.have.property('id');
                 stats.file.id.should.be.eql(id);
                 stats.size.should.be.eql(4);
             });
         });
     });
-
 });

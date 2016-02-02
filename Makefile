@@ -1,44 +1,26 @@
-all: riakfs
+ISTANBUL = ./node_modules/.bin/istanbul
+ESLINT = ./node_modules/.bin/eslint
+MOCHA = ./node_modules/.bin/mocha
 
-node_modules: package.json
-	@npm install
+all: lint test coverage
 
-
-riakfs: node_modules lib/*
-
-
-#
 # Tests
-#
-test: riakfs
-	@mocha
+test:
+	@$(ISTANBUL) cover --report text --report html _mocha
 
+# Check code style
+lint:
+	@$(ESLINT) lib/**/*.js test/**/*.js
 
-#
-# Coverage
-#
-lib-cov: clean-cov
-	@jscoverage --no-highlight lib lib-cov
+# Check coverage levels
+coverage:
+	@$(ISTANBUL) check-coverage --statement 85 --branch 70 --function 85
 
-test-cov: lib-cov
-	@RIAKFS_COV=1 mocha \
-		--require ./test/globals \
-		--reporter html-cov \
-		> coverage.html
-
-#
 # Clean up
-#
-
-clean: clean-node clean-cov
-
-clean-node:
-	@rm -rf node_modules
+clean: clean-cov
 
 clean-cov:
-	@rm -rf lib-cov
-	@rm -f coverage.html
+	@rm -rf coverage
 
-.PHONY: all
-.PHONY: test
+.PHONY: all test lint coverage clean clean-cov
 
