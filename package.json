@@ -10,9 +10,9 @@
     "main": "./lib/index.js",
     "keywords": ["riak", "fs"],
     "dependencies": {
-        "no-riak": "oleksiyk/no-riak",
+        "no-riak": "^1.0.0",
         "bluebird": "~=3.x.x",
-        "lodash": "^4.1.0",
+        "lodash": "^4.2.0",
         "mmmagic": "=0.4.1",
         "uid2": "~=0.0.3"
     },
