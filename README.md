@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/oleksiyk/riakfs.svg)](https://travis-ci.org/oleksiyk/riakfs)
+[![Test Coverage](https://codeclimate.com/github/oleksiyk/riakfs/badges/coverage.svg)](https://codeclimate.com/github/oleksiyk/riakfs/coverage)
 [![Dependencies](https://david-dm.org/oleksiyk/riakfs.svg)](https://david-dm.org/oleksiyk/riakfs)
 [![DevDependencies](https://david-dm.org/oleksiyk/riakfs/dev-status.svg)](https://david-dm.org/oleksiyk/riakfs#info=devDependencies)
 

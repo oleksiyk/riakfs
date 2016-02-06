@@ -13,6 +13,9 @@ addons:
     packages:
       - g++-4.8
 
+addons:
+  code_climate:
+    repo_token: ccb3dcc6f31eac8bc30fabfcbb27d3cece7cd9ebfdcd2e55d49ec5a5c1ed135f
 
 before_script:
   - "sudo apt-get purge riak"
@@ -24,3 +27,6 @@ before_script:
   - "sudo service riak start"
   - 'until sudo riak-admin test > /dev/null 2>&1; do sleep 2; done'
 
+after_script:
+  - npm install codeclimate-test-reporter
+  - codeclimate-test-reporter < coverage/lcov.info
