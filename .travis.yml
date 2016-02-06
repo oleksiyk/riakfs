@@ -6,16 +6,16 @@ node_js:
 
 env:
   - CXX=g++-4.8
+
 addons:
+  code_climate:
+    repo_token: ccb3dcc6f31eac8bc30fabfcbb27d3cece7cd9ebfdcd2e55d49ec5a5c1ed135f
   apt:
     sources:
       - ubuntu-toolchain-r-test
     packages:
       - g++-4.8
 
-addons:
-  code_climate:
-    repo_token: ccb3dcc6f31eac8bc30fabfcbb27d3cece7cd9ebfdcd2e55d49ec5a5c1ed135f
 
 before_script:
   - "sudo apt-get purge riak"
