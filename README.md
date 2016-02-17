@@ -1,7 +1,10 @@
-[![Build Status](https://travis-ci.org/oleksiyk/riakfs.svg)](https://travis-ci.org/oleksiyk/riakfs)
-[![Test Coverage](https://codeclimate.com/github/oleksiyk/riakfs/badges/coverage.svg)](https://codeclimate.com/github/oleksiyk/riakfs/coverage)
-[![Dependencies](https://david-dm.org/oleksiyk/riakfs.svg)](https://david-dm.org/oleksiyk/riakfs)
-[![DevDependencies](https://david-dm.org/oleksiyk/riakfs/dev-status.svg)](https://david-dm.org/oleksiyk/riakfs#info=devDependencies)
+[![Build Status][badge-travis]][travis]
+[![Test Coverage][badge-coverage]][coverage]
+[![bitHound Code][badge-bithound-code]][bithound-code]
+[![bitHound Overall Score][badge-bithound-overall]][bithound-overall]
+[![bitHound Dependencies][badge-bithound-deps]][bithound-deps]
+[![bitHound Dev Dependencies][badge-bithound-dev-deps]][bithound-dev-deps]
+[![license][badge-license]][license]
 
 # RiakFS
 
@@ -275,4 +278,23 @@ HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
 WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
+
+[badge-license]: https://img.shields.io/badge/License-MIT-green.svg
+[license]: https://github.com/oleksiyk/riakfs/blob/master/LICENSE
+[badge-travis]: https://api.travis-ci.org/oleksiyk/riakfs.svg?branch=master
+[travis]: https://travis-ci.org/oleksiyk/riakfs
+[badge-coverage]: https://codeclimate.com/github/oleksiyk/riakfs/badges/coverage.svg
+[coverage]: https://codeclimate.com/github/oleksiyk/riakfs/coverage
+[badge-deps]: https://david-dm.org/oleksiyk/riakfs.svg
+[deps]: https://david-dm.org/oleksiyk/riakfs
+[badge-dev-deps]: https://david-dm.org/oleksiyk/riakfs/dev-status.svg
+[dev-deps]: https://david-dm.org/oleksiyk/riakfs#info=devDependencies
+[badge-bithound-code]: https://www.bithound.io/github/oleksiyk/riakfs/badges/code.svg
+[bithound-code]: https://www.bithound.io/github/oleksiyk/riakfs
+[badge-bithound-overall]: https://www.bithound.io/github/oleksiyk/riakfs/badges/score.svg
+[bithound-overall]: https://www.bithound.io/github/oleksiyk/riakfs
+[badge-bithound-deps]: https://www.bithound.io/github/oleksiyk/riakfs/badges/dependencies.svg
+[bithound-deps]: https://www.bithound.io/github/oleksiyk/riakfs/master/dependencies/npm
+[badge-bithound-dev-deps]: https://www.bithound.io/github/oleksiyk/riakfs/badges/devDependencies.svg
+[bithound-dev-deps]: https://www.bithound.io/github/oleksiyk/riakfs/master/dependencies/npm
 
