@@ -1,9 +1,7 @@
 [![Build Status][badge-travis]][travis]
 [![Test Coverage][badge-coverage]][coverage]
-[![bitHound Code][badge-bithound-code]][bithound-code]
-[![bitHound Overall Score][badge-bithound-overall]][bithound-overall]
-[![bitHound Dependencies][badge-bithound-deps]][bithound-deps]
-[![bitHound Dev Dependencies][badge-bithound-dev-deps]][bithound-dev-deps]
+[![david Dependencies][badge-david-deps]][david-deps]
+[![david Dev Dependencies][badge-david-dev-deps]][david-dev-deps]
 [![license][badge-license]][license]
 
 # RiakFS
@@ -285,10 +283,10 @@ OTHER DEALINGS IN THE SOFTWARE.
 [travis]: https://travis-ci.org/oleksiyk/riakfs
 [badge-coverage]: https://codeclimate.com/github/oleksiyk/riakfs/badges/coverage.svg
 [coverage]: https://codeclimate.com/github/oleksiyk/riakfs/coverage
-[badge-deps]: https://david-dm.org/oleksiyk/riakfs.svg
-[deps]: https://david-dm.org/oleksiyk/riakfs
-[badge-dev-deps]: https://david-dm.org/oleksiyk/riakfs/dev-status.svg
-[dev-deps]: https://david-dm.org/oleksiyk/riakfs#info=devDependencies
+[badge-david-deps]: https://david-dm.org/oleksiyk/riakfs.svg
+[david-deps]: https://david-dm.org/oleksiyk/riakfs
+[badge-david-dev-deps]: https://david-dm.org/oleksiyk/riakfs/dev-status.svg
+[david-dev-deps]: https://david-dm.org/oleksiyk/riakfs#info=devDependencies
 [badge-bithound-code]: https://www.bithound.io/github/oleksiyk/riakfs/badges/code.svg
 [bithound-code]: https://www.bithound.io/github/oleksiyk/riakfs
 [badge-bithound-overall]: https://www.bithound.io/github/oleksiyk/riakfs/badges/score.svg
