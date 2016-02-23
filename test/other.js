@@ -2,7 +2,7 @@
 
 /* global describe, it, connect, before */
 
-// var Promise = require('bluebird');
+var Promise = require('bluebird');
 // var fs      = require('fs');
 // var path    = require('path')
 
@@ -68,5 +68,44 @@ describe('Other API', function () {
     //TODO: check if fstat should update info for opened file
     describe('#fstat', function () {
 
+    });
+
+    describe('listAll', function () {
+        var listfs;
+        before(function () {
+            return connect().then(function (_riakfs) {
+                listfs = _riakfs;
+                return Promise.all([
+                    listfs.mkdir('/dir1'),
+                    listfs.mkdir('/dir2'),
+                    listfs.writeFile('/file1', '123'),
+                    listfs.writeFile('/人人生而自由，在尊嚴和權利上一律平等。', '123')
+                ])
+                .then(function () {
+                    return Promise.all([
+                        listfs.mkdir('/dir1/dir11'),
+                        listfs.mkdir('/dir2/dir22'),
+                        listfs.writeFile('/dir1/file1', '123'),
+                        listfs.writeFile('/dir2/file2', '123'),
+                        listfs.writeFile('/dir2/file 2', '123'),
+                        listfs.writeFile('/dir2/тест', '123')
+                    ]);
+                });
+            });
+        });
+
+        it('should list all files', function () {
+            var count = 0;
+            return (function _list(marker) {
+                return listfs.listAll(3, marker).then(function (result) {
+                    count += result.results.length;
+                    if (result.continuation) {
+                        return _list(result.continuation);
+                    }
+                    count.should.be.eql(10);
+                    return null;
+                });
+            }());
+        });
     });
 });
