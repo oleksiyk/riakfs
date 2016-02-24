@@ -38,6 +38,7 @@ global.testfiles = [
 global.connect = function (options) {
     options = _.defaultsDeep(options || {}, {
         root: 'TeSt-' + uid2(8),
+        statsType: 'riakfs_stats',
         events: false
     });
 

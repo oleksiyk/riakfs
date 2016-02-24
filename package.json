@@ -10,7 +10,7 @@
     "main": "./lib/index.js",
     "keywords": ["riak", "fs"],
     "dependencies": {
-        "no-riak": "^1.1.0",
+        "no-riak": "^1.2.2",
         "bluebird": "~=3.x.x",
         "lodash": "^4.2.0",
         "mmmagic": "=0.4.1",
