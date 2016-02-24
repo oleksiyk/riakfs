@@ -171,6 +171,18 @@ describe('Other API', function () {
                     result.file.stats.should.have.property('trashStorage', 0);
                     result.file.stats.should.have.property('files', 5);
                 });
+            })
+            .then(function () {
+                return gfs.rename('/dir1/file1', '/.Trash/file1');
+            })
+            .then(function () {
+                return gfs.stat('/').then(function (result) {
+                    result.should.have.property('file').that.is.an('object');
+                    result.file.should.have.property('stats').that.is.an('object');
+                    result.file.stats.should.have.property('storage', 19);
+                    result.file.stats.should.have.property('trashStorage', 4);
+                    result.file.stats.should.have.property('files', 5);
+                });
             });
         });
     });
