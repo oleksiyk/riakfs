@@ -417,6 +417,27 @@ describe('Files', function () {
             });
         });
 
+        it('should copy file metadata', function () {
+            var sourceFilename = '/copy1_meta';
+            var targetFilename = '/copy2_meta';
+            var meta = {
+                hello: 'world'
+            };
+
+            return riakfs.writeFile(sourceFilename, '123456')
+            .then(function () {
+                return riakfs.setMeta(sourceFilename, meta);
+            })
+            .then(function () {
+                return riakfs.copy(sourceFilename, targetFilename);
+            })
+            .then(function () {
+                return riakfs.stat(targetFilename).then(function (stats) {
+                    stats.file.meta.should.be.eql(meta);
+                });
+            });
+        });
+
         it('should fail for missing source file', function () {
             return riakfs.copy('/abracadabra1', '/abracadbra2').should.be.rejected.and.eventually.have.property('code', 'ENOENT');
         });
