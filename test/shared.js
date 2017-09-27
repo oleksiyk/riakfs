@@ -533,40 +533,40 @@ describe('#shared directory', function () {
         });
 
         it('should send share:src event', function (done) {
-            riakfs1.once('share:src', function (filename, stats) {
+            riakfs1.once('share:src', function (filename, toRoot, toPath) {
                 filename.should.be.eql('/events-dir1');
-                stats.should.have.property('file');
-                stats.file.should.have.property('share');
+                toRoot.should.be.eql(riakfs2.options.root);
+                toPath.should.be.eql('/Shared/events-tdir1');
                 done();
             });
             riakfs1.share('/events-dir1', riakfs2.options.root, 'events-tdir1');
         });
 
         it('should send unshare:src event', function (done) {
-            riakfs1.once('unshare:src', function (filename, stats) {
+            riakfs1.once('unshare:src', function (filename, toRoot, toPath) {
                 filename.should.be.eql('/events-dir1');
-                stats.should.have.property('file');
-                stats.file.should.not.have.property('share');
+                toRoot.should.be.eql(riakfs2.options.root);
+                toPath.should.be.eql('/Shared/events-tdir1');
                 done();
             });
             riakfs1.unshare('/events-dir1', riakfs2.options.root);
         });
 
         it('should send share:dst event', function (done) {
-            riakfs2.once('share:dst', function (filename, stats) {
+            riakfs2.once('share:dst', function (filename, fromRoot, fromPath) {
                 filename.should.be.eql('/Shared/events-tdir2');
-                stats.should.have.property('file');
-                stats.file.should.have.property('_sharedFrom');
+                fromRoot.should.be.eql(riakfs1.options.root);
+                fromPath.should.be.eql('/events-dir2');
                 done();
             });
             riakfs1.share('/events-dir2', riakfs2.options.root, 'events-tdir2');
         });
 
         it('should send unshare:dst event', function (done) {
-            riakfs2.once('unshare:dst', function (filename, stats) {
+            riakfs2.once('unshare:dst', function (filename, fromRoot, fromPath) {
                 filename.should.be.eql('/Shared/events-tdir2');
-                stats.should.have.property('file');
-                stats.file.should.have.property('_sharedFrom');
+                fromRoot.should.be.eql(riakfs1.options.root);
+                fromPath.should.be.eql('/events-dir2');
                 done();
             });
             riakfs1.unshare('/events-dir2', riakfs2.options.root);
