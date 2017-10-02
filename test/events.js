@@ -69,11 +69,9 @@ describe('#events', function () {
             });
             riakfs.appendFile('/test1', ' world');
         });
-    });
 
-    describe('updateMeta', function () {
         it('updateMeta', function (done) {
-            riakfs.once('updateMeta', function (filename, stats) {
+            riakfs.once('change', function (filename, stats) {
                 riakfs.stat(filename).then(function (_stats) {
                     filename.should.be.eql('/test1');
                     _stats.should.be.eql(stats);
@@ -83,13 +81,23 @@ describe('#events', function () {
         });
 
         it('setMeta', function (done) {
-            riakfs.once('updateMeta', function (filename, stats) {
+            riakfs.once('change', function (filename, stats) {
                 riakfs.stat(filename).then(function (_stats) {
                     filename.should.be.eql('/test1');
                     _stats.should.be.eql(stats);
                 }).nodeify(done);
             });
             riakfs.setMeta('/test1', { hello1: 'world1' });
+        });
+
+        it('utimes', function (done) {
+            riakfs.once('change', function (filename, stats) {
+                riakfs.stat(filename).then(function (_stats) {
+                    filename.should.be.eql('/test1');
+                    _stats.should.be.eql(stats);
+                }).nodeify(done);
+            });
+            riakfs.utimes('/test1', new Date(), new Date());
         });
     });
 
