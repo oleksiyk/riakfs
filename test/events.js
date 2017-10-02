@@ -71,6 +71,28 @@ describe('#events', function () {
         });
     });
 
+    describe('updateMeta', function () {
+        it('updateMeta', function (done) {
+            riakfs.once('updateMeta', function (filename, stats) {
+                riakfs.stat(filename).then(function (_stats) {
+                    filename.should.be.eql('/test1');
+                    _stats.should.be.eql(stats);
+                }).nodeify(done);
+            });
+            riakfs.updateMeta('/test1', { hello: 'world' });
+        });
+
+        it('setMeta', function (done) {
+            riakfs.once('updateMeta', function (filename, stats) {
+                riakfs.stat(filename).then(function (_stats) {
+                    filename.should.be.eql('/test1');
+                    _stats.should.be.eql(stats);
+                }).nodeify(done);
+            });
+            riakfs.setMeta('/test1', { hello1: 'world1' });
+        });
+    });
+
     describe('delete', function () {
         before(function () {
             return riakfs.makeTree('/dir1/dir2/dir3').then(function () {
