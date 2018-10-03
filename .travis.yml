@@ -4,8 +4,9 @@ node_js:
   - "0.10"
   - "4.3"
 
+# NODE_NO_SUPPORT_MESSAGE=true is for sinon not supporting node 0.10: https://github.com/sinonjs/sinon/issues/1746
 env:
-  - CXX=g++-4.8 RIAK_ADMIN_USE_SUDO=true
+  - CXX=g++-4.8 RIAK_ADMIN_USE_SUDO=true NODE_NO_SUPPORT_MESSAGE=true
 
 addons:
   code_climate:
