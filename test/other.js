@@ -185,5 +185,14 @@ describe('Other API', function () {
                 });
             });
         });
+
+        it('overwrite zero length file', function () {
+            return gfs.writeFile('/zeroLengthFile', '').then(function () {
+                return gfs.writeFile('/zeroLengthFile', 'not empty');
+            })
+            .then(function () {
+                return gfs.readFile('/zeroLengthFile', { encoding: 'utf8' }).should.eventually.be.eql('not empty');
+            });
+        });
     });
 });
