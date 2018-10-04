@@ -16,7 +16,7 @@
     "no-riak": "^1.5.2",
     "bluebird": "^3.3.3",
     "lodash": "^4.17.11",
-    "mmmagic": "oleksiyk/mmmagic",
+    "mmmagic": "=0.5.2",
     "uid2": "~=0.0.3"
   },
   "devDependencies": {
