@@ -2,7 +2,7 @@
 
 /* global describe, it, connect, before */
 
-// var Promise = require('bluebird');
+var Promise = require('bluebird');
 // var fs      = require('fs');
 // var path    = require('path')
 
@@ -52,6 +52,20 @@ describe('Trash - #unlink', function () {
                 data.length.should.be.eql(6);
                 data.should.be.a('string').and.eql('hello2');
             });
+        });
+    });
+
+    it('should not make more than 10 versions in /.Trash', function () {
+        return riakfs.mkdir('/dirT').then(function () {
+            return Promise.each(new Array(12), function () {
+                return riakfs.writeFile('/dirT/fileT', 'hello')
+                .then(function () {
+                    return riakfs.unlink('/dirT/fileT');
+                });
+            });
+        })
+        .then(function () {
+            return riakfs.readdir('/.Trash/dirT').should.eventually.be.an('array').and.have.length(10);
         });
     });
 
