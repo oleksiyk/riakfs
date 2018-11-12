@@ -13,7 +13,7 @@
     "fs"
   ],
   "dependencies": {
-    "no-riak": "^1.5.2",
+    "no-riak": "^1.6.1",
     "bluebird": "^3.3.3",
     "lodash": "^4.17.11",
     "mmmagic": "=0.5.2",
