@@ -15,6 +15,7 @@
   "dependencies": {
     "bluebird": "^3.3.3",
     "lodash": "^4.17.11",
+    "mime-types": "^2.1.31",
     "mmmagic": "=0.5.2",
     "no-riak": "^1.6.1",
     "uid2": "~=0.0.3"
