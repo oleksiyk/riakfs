@@ -6,7 +6,7 @@
     "name": "Oleksiy Krivoshey",
     "email": "oleksiyk@gmail.com"
   },
-  "version": "2.5.18",
+  "version": "2.5.19",
   "main": "./lib/index.js",
   "keywords": [
     "riak",
