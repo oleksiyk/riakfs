@@ -21,7 +21,7 @@
     "uid2": "~=0.0.3"
   },
   "devDependencies": {
-    "mocha": "^3.1.2",
+    "mocha": "^10.2.0",
     "chai": "^3.5.0",
     "sinon": "^2.2.0",
     "sinon-chai": "^2.10.0",
