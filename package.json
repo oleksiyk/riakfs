@@ -15,21 +15,21 @@
   "dependencies": {
     "bluebird": "^3.3.3",
     "lodash": "^4.17.21",
-    "mime-types": "^2.1.31",
+    "mime-types": "^2.1.35",
     "mmmagic": "^0.5.3",
     "no-riak": "^1.6.9",
     "uid2": "~=0.0.3"
   },
   "devDependencies": {
-    "mocha": "^3.1.2",
     "chai": "^3.5.0",
-    "sinon": "^2.2.0",
-    "sinon-chai": "^2.10.0",
     "chai-as-promised": "^6.0.0",
     "eslint": "^2.13.1",
     "eslint-config-magictoolbox": "^0.0.2",
     "eslint-plugin-react": "^6.10.3",
-    "istanbul": "^0.4.2"
+    "istanbul": "^0.4.2",
+    "mocha": "^3.1.2",
+    "sinon": "^2.2.0",
+    "sinon-chai": "^2.10.0"
   },
   "bugs": {
     "url": "https://github.com/oleksiyk/riakfs/issues"
